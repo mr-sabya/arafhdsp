@@ -38,4 +38,7 @@ Route::middleware('auth:admin')->group(function () {
         Route::get('/areas', [App\Http\Controllers\Admin\LocationController::class, 'area'])->name('areas');
     });
 
+    // blood group
+    Route::get('/blood-group', [App\Http\Controllers\Admin\BloodGroupController::class, 'index'])->name('blood.group');
+
 });
