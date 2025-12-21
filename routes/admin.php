@@ -23,4 +23,19 @@ Route::middleware('auth:admin')->group(function () {
         // Skill Management
         Route::get('/skills', [App\Http\Controllers\Admin\SkillController::class, 'index'])->name('skill.index');
     });
+
+    // Location Management
+    Route::prefix('locations')->name('locations.')->group(function () {
+        Route::get('/divisions', [App\Http\Controllers\Admin\LocationController::class, 'division'])->name('divisions');
+
+        // district route
+        Route::get('/districts', [App\Http\Controllers\Admin\LocationController::class, 'district'])->name('districts');
+
+        // upazila route
+        Route::get('/upazilas', [App\Http\Controllers\Admin\LocationController::class, 'upazila'])->name('upazilas');
+
+        // area route
+        Route::get('/areas', [App\Http\Controllers\Admin\LocationController::class, 'area'])->name('areas');
+    });
+
 });
