@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('blood_groups', function (Blueprint $table) {
             $table->id();
+            $table->string('name');    // A+, A-, B+, etc.
+            $table->string('bn_name')->nullable(); // এ পজিটিভ, এ নেগেটিভ
+            $table->string('slug')->unique();      // a-positive
             $table->timestamps();
         });
     }
