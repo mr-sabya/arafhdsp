@@ -92,10 +92,11 @@
 
                 <li class="nav-item">
                     <a href="{{ route('admin.blood.group') }}" class="nav-link menu-link {{ Route::is('admin.blood.group') ? 'active' : '' }}" wire:navigate>
-                        <i class="bi bi-speedometer2"></i> <span data-key="t-blood-group">Blood Group</span>
+                        <i class="bi bi-droplet-half"></i> <span data-key="t-blood-group">Blood Group</span>
                     </a>
                 </li>
-                
+
+
 
             </ul>
         </div>
