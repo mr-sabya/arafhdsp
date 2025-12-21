@@ -3,38 +3,36 @@
 namespace App\Livewire\Admin\Auth;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 use Livewire\Component;
 
 class Login extends Component
 {
-    public $email;
-    public $password;
+    public $email = '';
+    public $password = '';
     public $remember = false;
+
+    protected $rules = [
+        'email' => 'required|email',
+        'password' => 'required',
+    ];
 
     public function login()
     {
-        $this->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
+        $this->validate();
 
-        $credentials = [
-            'email' => $this->email,
-            'password' => $this->password,
-        ];
-
-        if (Auth::attempt($credentials, $this->remember)) {
-            $user = Auth::user();
-
-            // Redirect based on is_admin
-            if ($user->is_admin) {
-                return redirect()->route('admin.dashboard');
-            }
-
-            return redirect()->route('dashboard');
+        // Attempt to log in using the 'admin' guard
+        if (!Auth::guard('admin')->attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
+            throw ValidationException::withMessages([
+                'email' => __('auth.failed'), // Uses Laravel's default auth.failed message
+            ]);
         }
 
-        $this->addError('email', 'Invalid login credentials.');
+        session()->regenerate();
+
+        // Redirect to the dashboard or intended page for admins
+        // You can fetch this from your LoginController's $redirectTo if you want consistency
+        return redirect()->route('admin.dashboard');
     }
 
     public function render()
