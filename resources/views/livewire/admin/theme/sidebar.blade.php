@@ -84,7 +84,7 @@
                                 <a href="{{ route('admin.locations.upazilas') }}" class="nav-link {{ Route::is('admin.locations.upazilas') ? 'active' : '' }}" data-key="t-upazilas" wire:navigate> Upazilas </a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ route('admin.locations.areas') }}" class="nav-link {{ Route::is('admin.locations.areas') ? 'active' : '' }}" data-key="t-areas" wire:navigate> Cities/Villages </a>
+                                <a href="{{ route('admin.locations.areas') }}" class="nav-link {{ Route::is('admin.locations.areas') ? 'active' : '' }}" data-key="t-areas" wire:navigate> Unions </a>
                             </li>
                         </ul>
                     </div>
@@ -93,6 +93,11 @@
                 <li class="nav-item">
                     <a href="{{ route('admin.blood.group') }}" class="nav-link menu-link {{ Route::is('admin.blood.group') ? 'active' : '' }}" wire:navigate>
                         <i class="bi bi-droplet-half"></i> <span data-key="t-blood-group">Blood Group</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('admin.pricing.index') }}" class="nav-link menu-link {{ Route::is('admin.pricing.index') ? 'active' : '' }}" wire:navigate>
+                        <i class="bi bi-tags"></i> <span data-key="t-pricing-plan">Pricing Plan</span>
                     </a>
                 </li>
 

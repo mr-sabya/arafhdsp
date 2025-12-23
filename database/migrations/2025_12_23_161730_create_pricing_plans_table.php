@@ -13,6 +13,14 @@ return new class extends Migration
     {
         Schema::create('pricing_plans', function (Blueprint $table) {
             $table->id();
+            $table->string('name'); // e.g., সাধারণ
+            $table->string('level_text'); // e.g., লেভেল ১
+            $table->decimal('price', 8, 2); // e.g., 100
+            $table->json('features'); // We will store features as an array
+            $table->boolean('is_featured')->default(false); // To highlight Level 2
+            $table->string('ribbon_text')->nullable(); // e.g., সেরা পছন্দ
+            $table->integer('sort_order')->default(0); // To arrange order
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
     }

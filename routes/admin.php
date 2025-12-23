@@ -41,4 +41,9 @@ Route::middleware('auth:admin')->group(function () {
     // blood group
     Route::get('/blood-group', [App\Http\Controllers\Admin\BloodGroupController::class, 'index'])->name('blood.group');
 
+    // pricing plan
+    Route::get('/pricing-plan', [App\Http\Controllers\Admin\PricingPlanController::class, 'index'])->name('pricing.index');
+
+
+
 });
