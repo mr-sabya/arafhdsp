@@ -22,4 +22,10 @@ class AuthController extends Controller
     {
         return view('frontend.auth.register'); // adjust path based on your folder structure
     }
+    
+    // verify otp
+    public function verify()
+    {
+        return view('frontend.auth.verify-otp'); // adjust path based on your folder structure
+    }
 }

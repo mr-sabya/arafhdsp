@@ -28,4 +28,6 @@ Route::middleware('guest')->group(function () {
 
     // Registration Routes
     Route::get('/register', [App\Http\Controllers\Frontend\AuthController::class, 'register'])->name('register');
+
+    Route::get('/verify-otp/{mobile}', [App\Http\Controllers\Frontend\AuthController::class, 'verify'])->name('verify.otp');
 });
