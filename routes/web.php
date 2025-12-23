@@ -19,7 +19,13 @@ Route::get('/about', [App\Http\Controllers\Frontend\AboutController::class, 'ind
 // contact
 Route::get('/contact', [App\Http\Controllers\Frontend\ContactController::class, 'index'])->name('contact');
 
-// login
-Route::get('/login', function () {
-    return view('frontend.home.index');
-})->name('login');
+
+// --- Routes for GUESTS only (Logged-out users) ---
+Route::middleware('guest')->group(function () {
+
+    // Login Routes
+    Route::get('/login', [App\Http\Controllers\Frontend\AuthController::class, 'login'])->name('login');
+
+    // Registration Routes
+    Route::get('/register', [App\Http\Controllers\Frontend\AuthController::class, 'register'])->name('register');
+});

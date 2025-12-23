@@ -7,7 +7,7 @@
                 <p class="lead mb-5 opacity-75">আমরা নিশ্চিত করি সঠিক স্বাস্থ্যসেবা, আর্থিক স্বচ্ছতা এবং দায়িত্বশীল
                     জীবনযাপন। যোগ দিন আমাদের বিশাল পরিবারে এবং উপভোগ করুন ৫০% পর্যন্ত ডিসকাউন্ট।</p>
                 <div class="d-flex justify-content-center gap-3">
-                    <a href="register.html" class="btn btn-light btn-lg text-primary fw-bold px-5">মেম্বার হোন</a>
+                    <a href="{{ route('register') }}" wire:navigate class="btn btn-light btn-lg text-primary fw-bold px-5">মেম্বার হোন</a>
                     <a href="#services" class="btn btn-outline-light btn-lg px-5">সার্ভিস দেখুন</a>
                 </div>
             </div>
