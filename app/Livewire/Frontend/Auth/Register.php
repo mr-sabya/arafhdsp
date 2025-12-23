@@ -38,10 +38,16 @@ class Register extends Component
         $this->divisions = Division::all();
         $this->bloodGroups = BloodGroup::all();
         $this->pricingPlans = PricingPlan::where('status', 1)->orderBy('sort_order', 'asc')->get();
+
+        // Auto-select plan if passed via URL
+        if (request()->has('plan')) {
+            $this->pricing_plan_id = request()->get('plan');
+            $this->calculateTotal();
+        }
     }
 
     /**
-     * Listeners for Calculation
+     * Logic Listeners
      */
     public function updatedPricingPlanId()
     {
@@ -57,20 +63,18 @@ class Register extends Component
         $this->selected_plan = PricingPlan::find($this->pricing_plan_id);
 
         if (!$this->selected_plan) {
-            $this->total_price = 0;
-            $this->base_unit_price = 0;
-            $this->discount_amount = 0;
+            $this->resetCalculation();
             return;
         }
 
         $this->base_unit_price = $this->selected_plan->price;
         $running_total = 0;
 
-        // 1. Pricing Type Logic
+        // 1. Pricing Type Logic (Fixed vs Per Member)
         if ($this->selected_plan->pricing_type === 'per_member') {
             $members = max(1, (int)$this->family_members);
 
-            // Check for Tiered/Fixed rule (e.g., "fixed_price_for_5" => 400)
+            // Tiered logic (e.g., "fixed_price_for_5" => 400)
             $rule_key = "fixed_price_for_" . $members;
             if (isset($this->selected_plan->pricing_rules[$rule_key])) {
                 $running_total = $this->selected_plan->pricing_rules[$rule_key];
@@ -78,7 +82,6 @@ class Register extends Component
                 $running_total = $this->base_unit_price * $members;
             }
         } else {
-            // Fixed pricing
             $running_total = $this->base_unit_price;
         }
 
@@ -90,6 +93,14 @@ class Register extends Component
             $this->discount_amount = 0;
             $this->total_price = $running_total;
         }
+    }
+
+    private function resetCalculation()
+    {
+        $this->total_price = 0;
+        $this->base_unit_price = 0;
+        $this->discount_amount = 0;
+        $this->selected_plan = null;
     }
 
     /**
@@ -118,16 +129,17 @@ class Register extends Component
         $this->validate([
             'name' => 'required|string|max:255',
             'mobile' => 'required|numeric|digits:11|unique:users,mobile',
-            'pricing_plan_id' => 'required',
-            'password' => 'required|min:6',
+            'blood_group_id' => 'required',
             'division_id' => 'required',
             'district_id' => 'required',
             'upazila_id' => 'required',
+            'pricing_plan_id' => 'required',
+            'password' => 'required|min:6',
             'terms' => 'accepted',
             'photo' => 'nullable|image|max:1024',
         ]);
 
-        $photoPath = $this->photo ? $this->photo->store('users', 'public') : null;
+        $photoPath = $this->photo ? $this->photo->store('profile-photos', 'public') : null;
         $otp = rand(1111, 9999);
 
         $user = User::create([
@@ -142,7 +154,7 @@ class Register extends Component
             'upazila_id' => $this->upazila_id,
             'area_id' => $this->area_id,
             'pricing_plan_id' => $this->pricing_plan_id,
-            'package_level' => $this->selected_plan->name,
+            'package_level' => $this->selected_plan->name, // Saves current plan name
             'family_members' => $this->family_members,
             'total_price' => $this->total_price,
             'nominee_name' => $this->nominee_name,
@@ -152,6 +164,8 @@ class Register extends Component
             'otp' => $otp,
             'otp_expires_at' => now()->addMinutes(10),
             'is_verified' => false,
+            'application_status' => 'pending', // Requires admin approval
+            'payment_status' => 'pending',
         ]);
 
         session()->flash('temp_otp', $otp);

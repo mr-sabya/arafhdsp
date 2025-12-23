@@ -102,7 +102,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('admin.payment-method.index') }}" class="nav-link menu-link {{ Route::is('admin.payment-method.index') ? 'active' : '' }}" wire:navigate>
-                        <i class="bi bi-tags"></i> <span data-key="t-payment-method">Payment Method</span>
+                        <i class="bi bi-credit-card"></i> <span data-key="t-payment-method">Payment Method</span>
                     </a>
                 </li>
 
