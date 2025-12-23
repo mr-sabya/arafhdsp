@@ -9,12 +9,12 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <!-- 'align-items-center' added for vertical alignment -->
             <ul class="navbar-nav ms-auto align-items-center">
-                <li class="nav-item"><a class="nav-link active" href="{{ route('home') }}" wire:navigate>হোম</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ route('service') }}" wire:navigate>সেবাসমূহ</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ route('diagnostic') }}" wire:navigate>ডায়াগনস্টিক</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ route('hospitals') }}" wire:navigate>হাসপাতাল</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ route('about') }}" wire:navigate>আমাদের সম্পর্কে</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ route('contact') }}" wire:navigate>যোগাযোগ</a></li>
+                <li class="nav-item"><a class="nav-link {{Route::is('home') ? 'active' : '' }}" href="{{ route('home') }}" wire:navigate>হোম</a></li>
+                <li class="nav-item"><a class="nav-link {{Route::is('service') ? 'active' : '' }}" href="{{ route('service') }}" wire:navigate>সেবাসমূহ</a></li>
+                <li class="nav-item"><a class="nav-link {{Route::is('diagnostic') ? 'active' : '' }}" href="{{ route('diagnostic') }}" wire:navigate>ডায়াগনস্টিক</a></li>
+                <li class="nav-item"><a class="nav-link {{Route::is('hospitals') ? 'active' : '' }}" href="{{ route('hospitals') }}" wire:navigate>হাসপাতাল</a></li>
+                <li class="nav-item"><a class="nav-link {{Route::is('about') ? 'active' : '' }}" href="{{ route('about') }}" wire:navigate>আমাদের সম্পর্কে</a></li>
+                <li class="nav-item"><a class="nav-link {{Route::is('contact') ? 'active' : '' }}" href="{{ route('contact') }}" wire:navigate>যোগাযোগ</a></li>
 
                 <!-- New Register Button with Design -->
                 <li class="nav-item ms-lg-3 mt-3 mt-lg-0">
