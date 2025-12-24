@@ -130,6 +130,21 @@
                                     @else
                                     <p class="text-muted mb-0 py-2 italic">প্যাকেজ নির্বাচন করলে এখানে হিসাব দেখা যাবে</p>
                                     @endif
+
+                                    @if($family_members > 1 && $selected_plan->pricing_type === 'per_member')
+                                    @php
+                                    // Check if a rule is currently active
+                                    $isRuleApplied = collect($selected_plan->pricing_rules)->contains('member_count', $family_members);
+                                    @endphp
+
+                                    @if($isRuleApplied)
+                                    <span class="text-success small d-block mb-2">
+                                        <i class="fas fa-check-circle"></i> {{ $family_members }} জনের জন্য বিশেষ প্যাকেজ রেট প্রযোজ্য হয়েছে।
+                                    </span>
+                                    @else
+                                    <span>x {{ $family_members }} জন</span>
+                                    @endif
+                                    @endif
                                 </div>
                             </div>
                         </div>

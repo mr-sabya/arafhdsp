@@ -130,15 +130,60 @@
                                     <input type="number" class="form-control" wire:model="discount_percentage" placeholder="e.g. 30">
                                 </div>
 
+                                <!-- Dynamic Pricing Rules Section -->
                                 @if($pricing_type === 'per_member')
                                 <div class="col-12">
-                                    <div class="alert alert-info py-2 mb-0 border-0">
-                                        <label class="form-label small fw-bold mb-1">Fixed Price Rule for 5 Members (Optional)</label>
-                                        <div class="input-group input-group-sm" style="width: 250px;">
-                                            <span class="input-group-text">5 People = ৳</span>
-                                            <input type="number" class="form-control shadow-none" wire:model="fixed_price_for_5" placeholder="e.g. 400">
+                                    <div class="alert alert-info py-3 mb-0 border-0">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <label class="form-label small fw-bold mb-0">Dynamic Fixed Price Rules (Optional)</label>
+                                            <button type="button" wire:click="addPricingRule" class="btn btn-xs btn-primary py-0 px-2" style="font-size: 11px;">
+                                                <i class="ri-add-line"></i> Add Rule
+                                            </button>
                                         </div>
-                                        <small class="d-block mt-1 opacity-75">If set, selecting 5 members will override the "Price per member" calculation.</small>
+
+                                        @foreach($pricing_rules as $index => $rule)
+                                        <div class="row g-2 mb-2 align-items-center" wire:key="pricing-rule-{{ $index }}">
+                                            <div class="col-md-5">
+                                                <div class="input-group input-group-sm">
+                                                    <!-- ADD .live HERE -->
+                                                    <input type="number"
+                                                        class="form-control"
+                                                        wire:model.live="pricing_rules.{{ $index }}.member_count"
+                                                        placeholder="Member Count">
+                                                    <span class="input-group-text small">People</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-5">
+                                                <div class="input-group input-group-sm">
+                                                    <span class="input-group-text">৳</span>
+                                                    <!-- ADD .live HERE -->
+                                                    <input type="number"
+                                                        class="form-control"
+                                                        wire:model.live="pricing_rules.{{ $index }}.price"
+                                                        placeholder="Fixed Total Price">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 text-end">
+                                                <button type="button" wire:click="removePricingRule({{ $index }})" class="btn btn-sm btn-outline-danger border-0">
+                                                    <i class="ri-delete-bin-line"></i>
+                                                </button>
+                                            </div>
+
+                                            <!-- Validation error display -->
+                                            @error('pricing_rules.'.$index.'.member_count')
+                                            <div class="col-12 text-danger" style="font-size: 11px;">{{ $message }}</div>
+                                            @enderror
+                                            @error('pricing_rules.'.$index.'.price')
+                                            <div class="col-12 text-danger" style="font-size: 11px;">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                        @endforeach
+
+                                        @if(empty($pricing_rules))
+                                        <small class="text-muted d-block mt-1 opacity-75">No specific rules set. Using base price per member.</small>
+                                        @else
+                                        <small class="d-block mt-1 opacity-75" style="font-size: 11px;">Note: These rules override the standard "Price × Members" calculation for specific counts.</small>
+                                        @endif
                                     </div>
                                 </div>
                                 @endif

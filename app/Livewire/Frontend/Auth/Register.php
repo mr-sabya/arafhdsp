@@ -69,19 +69,32 @@ class Register extends Component
 
         $this->base_unit_price = $this->selected_plan->price;
         $running_total = 0;
+        $members = max(1, (int)$this->family_members);
 
         // 1. Pricing Type Logic (Fixed vs Per Member)
         if ($this->selected_plan->pricing_type === 'per_member') {
-            $members = max(1, (int)$this->family_members);
 
-            // Tiered logic (e.g., "fixed_price_for_5" => 400)
-            $rule_key = "fixed_price_for_" . $members;
-            if (isset($this->selected_plan->pricing_rules[$rule_key])) {
-                $running_total = $this->selected_plan->pricing_rules[$rule_key];
+            $matchedRulePrice = null;
+
+            // Search through the dynamic rules array for a matching member count
+            if (is_array($this->selected_plan->pricing_rules)) {
+                foreach ($this->selected_plan->pricing_rules as $rule) {
+                    if ((int)$rule['member_count'] === $members) {
+                        $matchedRulePrice = (float)$rule['price'];
+                        break;
+                    }
+                }
+            }
+
+            if ($matchedRulePrice !== null) {
+                // Use the specific rule price (e.g., 5 people = 400 total)
+                $running_total = $matchedRulePrice;
             } else {
+                // Standard math: Price per member * total members
                 $running_total = $this->base_unit_price * $members;
             }
         } else {
+            // Fixed price package regardless of members
             $running_total = $this->base_unit_price;
         }
 

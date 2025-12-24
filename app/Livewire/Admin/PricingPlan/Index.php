@@ -14,10 +14,13 @@ class Index extends Component
 
     // Form Properties
     public $name, $level_text, $price, $ribbon_text, $sort_order = 0, $is_featured = false, $status = 1;
-    public $billing_interval = 'monthly'; // Added: monthly, yearly, lifetime, one_time
+    public $billing_interval = 'monthly';
     public $pricing_type = 'fixed';
     public $discount_percentage = 0;
-    public $fixed_price_for_5;
+
+    // Dynamic Pricing Rules
+    public $pricing_rules = [];
+
     public $features = [['text' => '', 'available' => true]];
 
     public $planId;
@@ -29,20 +32,25 @@ class Index extends Component
     public $sortField = 'sort_order';
     public $sortDirection = 'asc';
 
-    protected $rules = [
-        'name' => 'required|string|max:255',
-        'level_text' => 'required|string|max:255',
-        'price' => 'required|numeric',
-        'billing_interval' => 'required|in:monthly,yearly,lifetime,one_time',
-        'pricing_type' => 'required|in:fixed,per_member',
-        'discount_percentage' => 'nullable|numeric|min:0|max:100',
-        'fixed_price_for_5' => 'nullable|numeric',
-        'features' => 'required|array|min:1',
-        'features.*.text' => 'required|string',
-        'features.*.available' => 'boolean',
-        'sort_order' => 'required|integer',
-        'status' => 'required',
-    ];
+    protected function rules()
+    {
+        return [
+            'name' => 'required|string|max:255',
+            'level_text' => 'required|string|max:255',
+            'price' => 'required|numeric',
+            'billing_interval' => 'required|in:monthly,yearly,lifetime,one_time',
+            'pricing_type' => 'required|in:fixed,per_member',
+            'discount_percentage' => 'nullable|numeric|min:0|max:100',
+            'features' => 'required|array|min:1',
+            'features.*.text' => 'required|string',
+            'features.*.available' => 'boolean',
+            'pricing_rules' => 'nullable|array',
+            'pricing_rules.*.member_count' => 'required|integer|min:1',
+            'pricing_rules.*.price' => 'required|numeric|min:0',
+            'sort_order' => 'required|integer',
+            'status' => 'required',
+        ];
+    }
 
     public function openModal()
     {
@@ -55,6 +63,7 @@ class Index extends Component
         $this->isOpen = false;
     }
 
+    // --- Dynamic Feature Methods ---
     public function addFeature()
     {
         $this->features[] = ['text' => '', 'available' => true];
@@ -64,6 +73,18 @@ class Index extends Component
     {
         unset($this->features[$index]);
         $this->features = array_values($this->features);
+    }
+
+    // --- Dynamic Pricing Rule Methods ---
+    public function addPricingRule()
+    {
+        $this->pricing_rules[] = ['member_count' => '', 'price' => ''];
+    }
+
+    public function removePricingRule($index)
+    {
+        unset($this->pricing_rules[$index]);
+        $this->pricing_rules = array_values($this->pricing_rules);
     }
 
     public function resetFields()
@@ -81,11 +102,12 @@ class Index extends Component
             'isEditMode',
             'pricing_type',
             'discount_percentage',
-            'fixed_price_for_5'
+            'pricing_rules'
         ]);
         $this->status = 1;
         $this->billing_interval = 'monthly';
         $this->pricing_type = 'fixed';
+        $this->pricing_rules = [];
         $this->features = [['text' => '', 'available' => true]];
         $this->resetValidation();
     }
@@ -94,12 +116,6 @@ class Index extends Component
     {
         $this->validate();
 
-        // Prepare JSON rules
-        $rules = null;
-        if ($this->pricing_type === 'per_member' && $this->fixed_price_for_5) {
-            $rules = ['fixed_price_for_5' => (float)$this->fixed_price_for_5];
-        }
-
         $data = [
             'name' => $this->name,
             'level_text' => $this->level_text,
@@ -107,7 +123,7 @@ class Index extends Component
             'billing_interval' => $this->billing_interval,
             'pricing_type' => $this->pricing_type,
             'discount_percentage' => $this->discount_percentage ?? 0,
-            'pricing_rules' => $rules,
+            'pricing_rules' => ($this->pricing_type === 'per_member') ? $this->pricing_rules : null,
             'features' => $this->features,
             'is_featured' => $this->is_featured,
             'ribbon_text' => $this->ribbon_text,
@@ -137,7 +153,8 @@ class Index extends Component
         $this->pricing_type = $plan->pricing_type;
         $this->discount_percentage = $plan->discount_percentage;
 
-        $this->fixed_price_for_5 = $plan->pricing_rules['fixed_price_for_5'] ?? null;
+        // Load pricing rules (ensure it's an array)
+        $this->pricing_rules = $plan->pricing_rules ?? [];
 
         $this->features = $plan->features;
         $this->is_featured = $plan->is_featured;

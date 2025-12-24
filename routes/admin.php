@@ -46,5 +46,10 @@ Route::middleware('auth:admin')->group(function () {
     Route::get('/payment-methods', [App\Http\Controllers\Admin\PaymentMethodController::class, 'index'])->name('payment-method.index');
 
 
+    // Location Management
+    Route::prefix('hospitals')->name('hospital.')->group(function () {
+        Route::get('/departmemts', [App\Http\Controllers\Admin\HospitalController::class, 'departments'])->name('departments');
+
+    });
 
 });

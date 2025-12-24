@@ -23,7 +23,7 @@
     <link href="{{ asset('assets/backend/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
     <!-- Icons Css -->
     <link href="{{ asset('assets/backend/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset('assets/frontend/css/vendor/fontawesome.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/frontend/vendor/fontawesome/css/all.min.css') }}" rel="stylesheet" type="text/css" />
     <!-- App Css-->
     <link href="{{ asset('assets/backend/css/app.min.css') }}" rel="stylesheet" type="text/css" />
     <!-- custom Css-->
@@ -137,24 +137,17 @@
     <!-- JAVASCRIPT -->
     <script data-navigate-once src="{{ asset('assets/backend/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script data-navigate-once src="{{ asset('assets/backend/libs/simplebar/simplebar.min.js') }}"></script>
-    <script data-navigate-once src="{{ asset('assets/backend/js/pages/plugins/lord-icon-2.1.0.js') }}"></script>
     <script data-navigate-once src="{{ asset('assets/backend/js/plugins.js') }}"></script>
 
-    <!-- apexcharts -->
-    <script data-navigate-once src="{{ asset('assets/backend/libs/apexcharts/apexcharts.min.js') }}"></script>
-
-    <!-- Vector map-->
-    <script data-navigate-once src="{{ asset('assets/backend/libs/jsvectormap/jsvectormap.min.js') }}"></script>
-    <script data-navigate-once src="{{ asset('assets/backend/libs/jsvectormap/maps/world-merc.js') }}"></script>
-
+   
     <!--Swiper slider js-->
     <script data-navigate-once src="{{ asset('assets/backend/libs/swiper/swiper-bundle.min.js') }}"></script>
 
-    <!-- Dashboard init -->
-    <script data-navigate-once src="{{ asset('assets/backend/js/pages/dashboard-ecommerce.init.js') }}"></script>
+    @stack('scripts')
 
     <!-- App js -->
     <script src="{{ asset('assets/backend/js/app.js') }}"></script>
+
 
     @livewireScripts
     <script>
