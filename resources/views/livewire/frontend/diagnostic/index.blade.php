@@ -47,8 +47,8 @@
                     <h5 class="fw-bold text-dark mb-1">{{ $center->display_name }}</h5>
                     <p class="text-muted small mb-3">
                         <i class="fas fa-map-marker-alt text-primary me-1"></i>
-                        {{ $center->area ? (app()->getLocale() == 'bn' ? $center->area->name_bn : $center->area->name_en) . ', ' : '' }}
-                        {{ $center->district ? (app()->getLocale() == 'bn' ? $center->district->name_bn : $center->district->name_en) : '' }}
+                        {{ $center->area ? (app()->getLocale() == 'bn' ? $center->area->bn_name : $center->area->bn_name) . ', ' : '' }}
+                        {{ $center->district ? (app()->getLocale() == 'bn' ? $center->district->bn_name : $center->district->bn_name) : '' }}
                     </p>
 
                     <hr class="opacity-10">
