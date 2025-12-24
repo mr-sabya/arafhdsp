@@ -127,6 +127,21 @@
                         </ul>
                     </div>
                 </li>
+                <!-- diagnostic management -->
+                <li class="nav-item">
+                    <a class="nav-link menu-link {{ Route::is('admin.diagnostic.*') ? 'collapsed active' : '' }}" href="#diagnosticManage" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarPages">
+                        <i class="bi bi-heart-pulse"></i> <span data-key="t-diagnostic">Diagnostic</span>
+                    </a>
+                    <div class="collapse menu-dropdown {{ Route::is('admin.diagnostic.*') ? 'show' : '' }}" id="diagnosticManage">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="{{ route('admin.diagnostic.index') }}" class="nav-link {{ Route::is('admin.diagnostic.index') ? 'active' : '' }}" data-key="t-diagnostic-center" wire:navigate> Diagnostic Center </a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </li>
 
             </ul>
         </div>

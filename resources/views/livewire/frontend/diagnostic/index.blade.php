@@ -1,127 +1,90 @@
-<div class="container mb-5">
-    <div class="row g-4" id="testContainer">
-
-        <!-- Card 1: Pathology -->
-        <div class="col-md-6 col-lg-4 test-card">
-            <div class="diag-card p-4">
-                <div class="discount-badge">৫০% পর্যন্ত ছাড়</div>
-                <div class="diag-icon">
-                    <i class="fas fa-vial"></i>
+<div class="container py-5">
+    <!-- Filter Section -->
+    <div class="row g-3 mb-5 align-items-center">
+        <div class="col-lg-4">
+            <h4 class="fw-bold text-primary border-start border-4 border-primary ps-3 mb-0">
+                {{ app()->getLocale() == 'bn' ? 'ডায়াগনস্টিক সেন্টারসমূহ' : 'Diagnostic Centers' }}
+            </h4>
+        </div>
+        <div class="col-lg-8">
+            <div class="row g-2 justify-content-end">
+                <div class="col-md-3">
+                    <select wire:model.live="division_id" class="form-select shadow-none">
+                        <option value="">{{ app()->getLocale() == 'bn' ? 'বিভাগ সিলেক্ট করুন' : 'Select Division' }}</option>
+                        @foreach($divisions as $div) <option value="{{ $div->id }}">{{ app()->getLocale() == 'bn' ? $div->name_bn : $div->name_en }}</option> @endforeach
+                    </select>
                 </div>
-                <h4 class="fw-bold mb-3">জেনারেল প্যাথলজি</h4>
-                <p class="text-muted small">রক্ত ও সাধারণ রোগ নির্ণয়ের পরীক্ষা।</p>
-                <hr>
-                <ul class="list-unstyled test-list">
-                    <li><i class="fas fa-check-circle"></i> Complete Blood Count (CBC)</li>
-                    <li><i class="fas fa-check-circle"></i> Random Blood Sugar (RBS)</li>
-                    <li><i class="fas fa-check-circle"></i> CRP & CRS Test</li>
-                    <li><i class="fas fa-check-circle"></i> Lipid Profile</li>
-                </ul>
-                <a href="contact.html" class="btn btn-outline-primary w-100 mt-3 rounded-pill">বুকিং দিন</a>
+                <div class="col-md-3">
+                    <select wire:model.live="district_id" class="form-select shadow-none" @disabled(!$division_id)>
+                        <option value="">{{ app()->getLocale() == 'bn' ? 'জেলা সিলেক্ট করুন' : 'Select District' }}</option>
+                        @foreach($districts as $dis) <option value="{{ $dis->id }}">{{ app()->getLocale() == 'bn' ? $dis->name_bn : $dis->name_en }}</option> @endforeach
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <input type="text" wire:model.live.debounce.300ms="search" class="form-control shadow-none" placeholder="{{ app()->getLocale() == 'bn' ? 'সেন্টারের নাম খুঁজুন...' : 'Search center name...' }}">
+                </div>
             </div>
         </div>
+    </div>
 
-        <!-- Card 2: Hormone -->
-        <div class="col-md-6 col-lg-4 test-card">
-            <div class="diag-card p-4">
-                <div class="discount-badge">৩০% ছাড়</div>
-                <div class="diag-icon">
-                    <i class="fas fa-dna"></i>
+    <!-- Centers Grid -->
+    <div class="row g-4">
+        @forelse($centers as $center)
+        <div class="col-md-6 col-lg-4" wire:key="center-{{ $center->id }}">
+            <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden diagnostic-card-ui">
+                <!-- Image Section -->
+                <div class="position-relative">
+                    <img src="{{ $center->photo ? asset('storage/'.$center->photo) : url('assets/frontend/images/default-hospital-search.jpg') }}"
+                        class="w-100" style="height: 220px; object-fit: cover;" alt="{{ $center->display_name }}">
+
+                    @if($center->display_badge)
+                    <div class="discount-badge-new">{{ $center->display_badge }}</div>
+                    @endif
                 </div>
-                <h4 class="fw-bold mb-3">হরমোন ও থাইরয়েড</h4>
-                <p class="text-muted small">শরীরের হরমোন ও গ্ল্যান্ড বিষয়ক পরীক্ষা।</p>
-                <hr>
-                <ul class="list-unstyled test-list">
-                    <li><i class="fas fa-check-circle"></i> Thyroid Profile (T3, T4, TSH)</li>
-                    <li><i class="fas fa-check-circle"></i> Testosterone Test</li>
-                    <li><i class="fas fa-check-circle"></i> Insulin Level</li>
-                    <li><i class="fas fa-check-circle"></i> Vitamin D3 Test</li>
-                </ul>
-                <a href="contact.html" class="btn btn-outline-primary w-100 mt-3 rounded-pill">বুকিং দিন</a>
+
+                <div class="card-body p-4">
+                    <!-- Title & Location -->
+                    <h5 class="fw-bold text-dark mb-1">{{ $center->display_name }}</h5>
+                    <p class="text-muted small mb-3">
+                        <i class="fas fa-map-marker-alt text-primary me-1"></i>
+                        {{ $center->area ? (app()->getLocale() == 'bn' ? $center->area->name_bn : $center->area->name_en) . ', ' : '' }}
+                        {{ $center->district ? (app()->getLocale() == 'bn' ? $center->district->name_bn : $center->district->name_en) : '' }}
+                    </p>
+
+                    <hr class="opacity-10">
+
+                    <!-- Test List from JSON -->
+                    <h6 class="small fw-bold text-secondary mb-2">{{ app()->getLocale() == 'bn' ? 'উপলব্ধ পরীক্ষাসমূহ:' : 'Available Tests:' }}</h6>
+                    <ul class="list-unstyled mb-4">
+                        @if($center->test_list)
+                        @foreach(array_slice($center->test_list, 0, 4) as $test)
+                        <li class="small text-muted mb-1"><i class="fas fa-check-circle text-success me-2"></i> {{ $test }}</li>
+                        @endforeach
+                        @endif
+                    </ul>
+
+                    <div class="mt-auto">
+                        <a href="tel:{{ $center->phone }}" class="btn btn-outline-primary w-100 rounded-pill">
+                            <i class="fas fa-phone-alt me-2"></i> {{ app()->getLocale() == 'bn' ? 'কল করুন' : 'Call Now' }}
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
-
-        <!-- Card 3: Liver & Kidney -->
-        <div class="col-md-6 col-lg-4 test-card">
-            <div class="diag-card p-4">
-                <div class="discount-badge">২০% – ৩০% ছাড়</div>
-                <div class="diag-icon">
-                    <i class="fas fa-kidney"></i>
-                </div>
-                <h4 class="fw-bold mb-3">লিভার ও কিডনি</h4>
-                <p class="text-muted small">শরীরের ভাইটাল অর্গান ফাংশন টেস্ট।</p>
-                <hr>
-                <ul class="list-unstyled test-list">
-                    <li><i class="fas fa-check-circle"></i> Serum Creatinine (Kidney)</li>
-                    <li><i class="fas fa-check-circle"></i> SGPT / SGOT (Liver)</li>
-                    <li><i class="fas fa-check-circle"></i> Bilirubin Test</li>
-                    <li><i class="fas fa-check-circle"></i> Electrolytes</li>
-                </ul>
-                <a href="contact.html" class="btn btn-outline-primary w-100 mt-3 rounded-pill">বুকিং দিন</a>
+        @empty
+        <div class="col-12 text-center py-5">
+            <div class="alert alert-light border-0 shadow-sm py-5">
+                <i class="fas fa-search text-muted mb-3 d-block fs-1 opacity-25"></i>
+                <p class="text-muted mb-0 fw-bold">
+                    {{ app()->getLocale() == 'bn' ? 'দুঃখিত, বর্তমানে কোন সেন্টার খুঁজে পাওয়া যায়নি।' : 'Sorry, no diagnostic centers found at the moment.' }}
+                </p>
             </div>
         </div>
+        @endforelse
+    </div>
 
-        <!-- Card 4: Imaging -->
-        <div class="col-md-6 col-lg-4 test-card">
-            <div class="diag-card p-4">
-                <div class="discount-badge">২০% ছাড়</div>
-                <div class="diag-icon">
-                    <i class="fas fa-x-ray"></i>
-                </div>
-                <h4 class="fw-bold mb-3">ডিজিটাল ইমেজিং</h4>
-                <p class="text-muted small">আধুনিক মেশিনে এক্স-রে ও স্ক্যানিং।</p>
-                <hr>
-                <ul class="list-unstyled test-list">
-                    <li><i class="fas fa-check-circle"></i> Digital X-Ray</li>
-                    <li><i class="fas fa-check-circle"></i> Ultrasonography (USG)</li>
-                    <li><i class="fas fa-check-circle"></i> ECG (Heart)</li>
-                    <li><i class="fas fa-check-circle"></i> CT Scan Support</li>
-                </ul>
-                <a href="contact.html" class="btn btn-outline-primary w-100 mt-3 rounded-pill">বুকিং দিন</a>
-            </div>
-        </div>
-
-        <!-- Card 5: Viral & Immunology -->
-        <div class="col-md-6 col-lg-4 test-card">
-            <div class="diag-card p-4">
-                <div class="discount-badge">১৫% ছাড়</div>
-                <div class="diag-icon">
-                    <i class="fas fa-virus"></i>
-                </div>
-                <h4 class="fw-bold mb-3">ভাইরাল ও ইমিউনোলজি</h4>
-                <p class="text-muted small">সংক্রামক রোগ ও ভাইরাস শনাক্তকরণ।</p>
-                <hr>
-                <ul class="list-unstyled test-list">
-                    <li><i class="fas fa-check-circle"></i> Dengue NS1</li>
-                    <li><i class="fas fa-check-circle"></i> Hepatitis B (HBsAg)</li>
-                    <li><i class="fas fa-check-circle"></i> Typhoid Test</li>
-                    <li><i class="fas fa-check-circle"></i> Urine R/E</li>
-                </ul>
-                <a href="contact.html" class="btn btn-outline-primary w-100 mt-3 rounded-pill">বুকিং দিন</a>
-            </div>
-        </div>
-
-        <!-- Card 6: Health Checkup -->
-        <div class="col-md-6 col-lg-4 test-card">
-            <div class="diag-card p-4 bg-primary text-white">
-                <div class="discount-badge bg-warning text-dark">স্পেশাল প্যাকেজ</div>
-                <div class="diag-icon bg-white text-primary">
-                    <i class="fas fa-notes-medical"></i>
-                </div>
-                <h4 class="fw-bold mb-3">ফুল বডি চেকআপ</h4>
-                <p class="text-white-50 small">সুস্থ থাকতে নিয়মিত চেকআপ জরুরি।</p>
-                <hr class="border-light">
-                <ul class="list-unstyled test-list">
-                    <li class="text-white"><i class="fas fa-check-circle text-warning"></i> ডায়াবেটিস চেকআপ</li>
-                    <li class="text-white"><i class="fas fa-check-circle text-warning"></i> হার্ট ও লাং চেকআপ</li>
-                    <li class="text-white"><i class="fas fa-check-circle text-warning"></i> লিভার ও কিডনি প্রোফাইল
-                    </li>
-                    <li class="text-white"><i class="fas fa-check-circle text-warning"></i> ডাক্তার কনসালটেন্সি</li>
-                </ul>
-                <a href="contact.html" class="btn btn-light text-primary fw-bold w-100 mt-3 rounded-pill">বিস্তারিত
-                    দেখুন</a>
-            </div>
-        </div>
-
+    <!-- Pagination -->
+    <div class="mt-5 d-flex justify-content-center">
+        {{ $centers->links() }}
     </div>
 </div>

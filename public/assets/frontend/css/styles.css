@@ -214,6 +214,29 @@ body {
     font-size: 0.8rem;
 }
 
+.diagnostic-card-ui {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: #fff;
+}
+
+.diagnostic-card-ui:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1) !important;
+}
+
+.discount-badge-new {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: #ff3e3e;
+    color: #fff;
+    padding: 5px 15px;
+    border-radius: 50px;
+    font-size: 13px;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
 .search-box {
     max-width: 600px;
     margin: -75px auto 40px;

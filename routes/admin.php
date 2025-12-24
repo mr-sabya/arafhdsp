@@ -46,7 +46,7 @@ Route::middleware('auth:admin')->group(function () {
     Route::get('/payment-methods', [App\Http\Controllers\Admin\PaymentMethodController::class, 'index'])->name('payment-method.index');
 
 
-    // Location Management
+    // Hospital Management
     Route::prefix('hospital')->name('hospital.')->group(function () {
         Route::get('/departmemts', [App\Http\Controllers\Admin\HospitalController::class, 'departments'])->name('departments');
 
@@ -54,6 +54,12 @@ Route::middleware('auth:admin')->group(function () {
         Route::get('/doctors', [App\Http\Controllers\Admin\HospitalController::class, 'doctors'])->name('doctors');
 
         Route::get('/hospitals', [App\Http\Controllers\Admin\HospitalController::class, 'hospitals'])->name('hospitals');
+
+    });
+
+    // Diagnostic Management
+    Route::prefix('diagnostic')->name('diagnostic.')->group(function () {
+        Route::get('/diagnostic-center', [App\Http\Controllers\Admin\DiagnosticController::class, 'index'])->name('index');
 
     });
 
