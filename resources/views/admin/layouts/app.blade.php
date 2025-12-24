@@ -28,6 +28,8 @@
     <link href="{{ asset('assets/backend/css/app.min.css') }}" rel="stylesheet" type="text/css" />
     <!-- custom Css-->
     <link href="{{ asset('assets/backend/css/custom.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/backend/css/custom.css') }}" rel="stylesheet" type="text/css" />
+
     @livewireStyles
 </head>
 
@@ -76,7 +78,7 @@
         <div class="vertical-overlay"></div>
 
         <x-alert />
-        
+
         <!-- ============================================================== -->
         <!-- Start right Content here -->
         <!-- ============================================================== -->
@@ -139,7 +141,7 @@
     <script data-navigate-once src="{{ asset('assets/backend/libs/simplebar/simplebar.min.js') }}"></script>
     <script data-navigate-once src="{{ asset('assets/backend/js/plugins.js') }}"></script>
 
-   
+
     <!--Swiper slider js-->
     <script data-navigate-once src="{{ asset('assets/backend/libs/swiper/swiper-bundle.min.js') }}"></script>
 

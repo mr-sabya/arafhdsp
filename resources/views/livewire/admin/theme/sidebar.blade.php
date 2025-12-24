@@ -107,17 +107,20 @@
                 </li>
 
                 <!-- hospital management -->
-                 <li class="nav-item">
+                <li class="nav-item">
                     <a class="nav-link menu-link {{ Route::is('admin.hospital.*') ? 'collapsed active' : '' }}" href="#hospitalManage" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarPages">
-                        <i class="bi bi-geo-alt"></i> <span data-key="t-hospitals">Hospitals</span>
+                        <i class="bi bi-hospital"></i> <span data-key="t-hospitals">Hospitals</span>
                     </a>
                     <div class="collapse menu-dropdown {{ Route::is('admin.hospital.*') ? 'show' : '' }}" id="hospitalManage">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
                                 <a href="{{ route('admin.hospital.departments') }}" class="nav-link {{ Route::is('admin.hospital.departments') ? 'active' : '' }}" data-key="t-departments" wire:navigate> Departments </a>
                             </li>
-                            
+                            <li class="nav-item">
+                                <a href="{{ route('admin.hospital.doctors') }}" class="nav-link {{ Route::is('admin.hospital.doctors') ? 'active' : '' }}" data-key="t-doctors" wire:navigate> Doctors </a>
+                            </li>
+
                         </ul>
                     </div>
                 </li>
