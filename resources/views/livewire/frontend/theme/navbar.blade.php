@@ -42,12 +42,12 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2" aria-labelledby="navbarDropdown">
                         <li>
-                            <a class="dropdown-item py-2" href="{{ route('dashboard') }}" wire:navigate>
+                            <a class="dropdown-item py-2" href="#" wire:navigate>
                                 <i class="fas fa-th-large me-2 text-primary"></i> ড্যাশবোর্ড
                             </a>
                         </li>
                         <li>
-                            <a class="dropdown-item py-2" href="{{ route('profile.show') }}" wire:navigate>
+                            <a class="dropdown-item py-2" href="#" wire:navigate>
                                 <i class="fas fa-user-cog me-2 text-primary"></i> প্রোফাইল সেটিংস
                             </a>
                         </li>
@@ -55,10 +55,7 @@
                             <hr class="dropdown-divider">
                         </li>
                         <li>
-                            <!-- Logout is usually a POST request in Laravel -->
-                            <button type="submit" class="dropdown-item py-2 text-danger">
-                                <i class="fas fa-sign-out-alt me-2"></i> লগআউট
-                            </button>
+                            <livewire:frontend.theme.logout />
                         </li>
                     </ul>
                 </li>

@@ -31,6 +31,9 @@
     <livewire:frontend.theme.footer />
 
     <script src="{{ asset('assets/frontend/vendor/bootstrap/js/bootstrap.min.js') }}"></script>
+
+    <!-- JS at end of <body> (Bundle includes Popper.js) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     @livewireScripts
 </body>
 

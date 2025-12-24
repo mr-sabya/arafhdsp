@@ -28,6 +28,13 @@ Route::middleware('guest')->group(function () {
 
     // Registration Routes
     Route::get('/register', [App\Http\Controllers\Frontend\AuthController::class, 'register'])->name('register');
-
+    
     Route::get('/verify-otp/{mobile}', [App\Http\Controllers\Frontend\AuthController::class, 'verify'])->name('verify.otp');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/payment', [App\Http\Controllers\Frontend\PaymentController::class, 'payment'])->name('payment');
+
+    // payment status
+    Route::get('/payment-status', [App\Http\Controllers\Frontend\PaymentController::class, 'paymentStatus'])->name('payment.status');
 });

@@ -16,32 +16,39 @@ class VerifyOtp extends Component
     {
         $this->mobile = $mobile;
         // Retrieve the flashed OTP from session
-        $this->display_otp = session('temp_otp');
+        $user = User::where('mobile', $mobile)->first();
+        $this->display_otp = $user->otp;
     }
 
     public function verify()
     {
         $user = User::where('mobile', $this->mobile)->first();
 
+        // ১. ইউজার আছে কি না এবং ওটিপি মিলছে কি না চেক করুন
         if (!$user || $user->otp !== $this->otp_input) {
             session()->flash('error', 'ভুল ওটিপি (OTP), আবার চেষ্টা করুন।');
             return;
         }
 
-        if (now()->gt($user->otp_expires_at)) {
-            session()->flash('error', 'ওটিপি (OTP) এর মেয়াদ শেষ হয়ে গেছে।');
+        // ২. মেয়াদ শেষ হয়েছে কি না চেক করুন (Null চেকসহ)
+        // যদি otp_expires_at না থাকে অথবা বর্তমান সময় মেয়াদের চেয়ে বেশি হয়
+        if (!$user->otp_expires_at || now()->gt($user->otp_expires_at)) {
+            session()->flash('error', 'ওটিপি (OTP) এর মেয়াদ শেষ হয়ে গেছে। আবার ওটিপি পাঠান।');
             return;
         }
 
-        // Mark as verified
+        // ৩. ভেরিফিকেশন সফল হলে
         $user->update([
             'is_verified' => true,
-            'otp' => null, // Clear OTP after success
+            'otp' => null,
+            'otp_expires_at' => null, // মেয়াদও ক্লিয়ার করে দিন
         ]);
 
         Auth::login($user);
 
-        return redirect()->route('dashboard')->with('success', 'আপনার অ্যাকাউন্ট সফলভাবে যাচাই করা হয়েছে।');
+        session()->flash('success', 'আপনার অ্যাকাউন্ট সফলভাবে যাচাই করা হয়েছে।');
+
+        return $this->redirectRoute('payment', navigate: true);
     }
 
     public function render()

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class AuthController extends Controller
@@ -24,8 +25,9 @@ class AuthController extends Controller
     }
     
     // verify otp
-    public function verify()
+    public function verify($mobile)
     {
-        return view('frontend.auth.verify-otp'); // adjust path based on your folder structure
+        $user = User::where('mobile', $mobile)->first();
+        return view('frontend.auth.verify-otp', compact('user')); // adjust path based on your folder structure
     }
 }
