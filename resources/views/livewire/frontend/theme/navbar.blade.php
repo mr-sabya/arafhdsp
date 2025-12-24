@@ -42,7 +42,7 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2" aria-labelledby="navbarDropdown">
                         <li>
-                            <a class="dropdown-item py-2" href="#" wire:navigate>
+                            <a class="dropdown-item py-2" href="{{ route('user.dashboard') }}" wire:navigate>
                                 <i class="fas fa-th-large me-2 text-primary"></i> ড্যাশবোর্ড
                             </a>
                         </li>

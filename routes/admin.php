@@ -60,7 +60,8 @@ Route::middleware('auth:admin')->group(function () {
     // Diagnostic Management
     Route::prefix('diagnostic')->name('diagnostic.')->group(function () {
         Route::get('/diagnostic-center', [App\Http\Controllers\Admin\DiagnosticController::class, 'index'])->name('index');
-
+        
     });
-
+    
+    Route::get('/users', [App\Http\Controllers\Admin\UserController::class, 'index'])->name('user.index');
 });

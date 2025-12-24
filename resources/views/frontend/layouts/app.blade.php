@@ -30,10 +30,22 @@
     <!-- Footer -->
     <livewire:frontend.theme.footer />
 
-    <script src="{{ asset('assets/frontend/vendor/bootstrap/js/bootstrap.min.js') }}"></script>
+    <!-- পপার আগে থাকবে -->
+    <script data-navigate-once src="{{ asset('assets/frontend/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <!-- <script data-navigate-once src="{{ asset('assets/frontend/vendor/bootstrap/js/bootstrap.min.js') }}"></script> -->
 
-    <!-- JS at end of <body> (Bundle includes Popper.js) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        window.onscroll = function() {
+            var nav = document.querySelector('.navbar');
+            if (window.pageYOffset > 50) {
+                nav.classList.add('shadow-sm', 'py-2');
+            } else {
+                nav.classList.remove('shadow-sm', 'py-2');
+            }
+        };
+    </script>
+    
+
     @livewireScripts
 </body>
 

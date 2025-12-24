@@ -37,4 +37,7 @@ Route::middleware('auth')->group(function () {
 
     // payment status
     Route::get('/payment-status', [App\Http\Controllers\Frontend\PaymentController::class, 'paymentStatus'])->name('payment.status');
+
+    // user dashboard
+    Route::get('/user/dashboard', [App\Http\Controllers\Frontend\UserController::class, 'dashboard'])->name('user.dashboard');
 });

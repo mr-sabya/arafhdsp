@@ -20,7 +20,7 @@ class ProcessPayment extends Component
 
         // ইউজার যদি অলরেডি পেইড হয় তবে ড্যাশবোর্ডে পাঠিয়ে দিন
         if ($this->user->payment_status === 'paid') {
-            return redirect()->route('dashboard');
+            return redirect()->route('user.dashboard');
         }
 
         $this->paymentMethods = PaymentMethod::where('status', true)->orderBy('sort_order')->get();

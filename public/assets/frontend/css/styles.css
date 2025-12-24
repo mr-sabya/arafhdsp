@@ -1,19 +1,26 @@
+/* =========================================
+   ১. ভেরিয়েবল এবং গ্লোবাল স্টাইল
+   ========================================= */
 :root {
     --primary-color: #0d6efd;
     --secondary-color: #198754;
     --accent-color: #ffc107;
     --dark-bg: #212529;
+    --light-bg: #f4f7f6;
     --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
     --hover-shadow: 0 15px 45px rgba(13, 110, 253, 0.15);
 }
 
 body {
     font-family: 'Hind Siliguri', sans-serif;
-    background-color: #f4f7f6;
+    background-color: var(--light-bg);
     overflow-x: hidden;
+    color: #333;
 }
 
-/* Navbar */
+/* =========================================
+   ২. লেআউট (Navbar, Hero, Footer)
+   ========================================= */
 .navbar {
     backdrop-filter: blur(10px);
     background: rgba(255, 255, 255, 0.95);
@@ -22,25 +29,25 @@ body {
 
 .navbar-brand {
     width: 220px;
+    display: inline-block;
 }
 
 .navbar-brand img {
     width: 100%;
 }
 
-/* Hero Section */
 .hero {
-    background: linear-gradient(135deg, rgba(13, 110, 253, 0.8), rgba(25, 135, 84, 0.8)), url('https://images.unsplash.com/photo-1581056771107-24ca5f033842?q=80&w=1920&auto=format&fit=crop');
+    background: linear-gradient(135deg, rgba(13, 110, 253, 0.8), rgba(25, 135, 84, 0.8)),
+        url('https://images.unsplash.com/photo-1581056771107-24ca5f033842?q=80&w=1920&auto=format&fit=crop');
     background-size: cover;
     background-position: center;
     padding: 150px 0 100px;
     color: white;
 }
 
-
-/* Page Header (Small Hero for inner pages) */
 .page-header {
-    background: linear-gradient(rgba(13, 110, 253, 0.9), rgba(25, 135, 84, 0.8)), url('https://source.unsplash.com/1600x600/?hospital,corridor');
+    background: linear-gradient(rgba(13, 110, 253, 0.9), rgba(25, 135, 84, 0.8)),
+        url('https://source.unsplash.com/1600x600/?hospital,corridor');
     background-size: cover;
     background-position: center;
     color: white;
@@ -49,86 +56,30 @@ body {
     margin-bottom: 40px;
 }
 
-/* Cards */
-.custom-card {
-    border: none;
-    border-radius: 12px;
-    background: white;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+footer {
+    background: #1a1a1a;
+    color: #bbb;
+    padding: 60px 0 20px;
+}
+
+footer a {
+    color: #bbb;
+    text-decoration: none;
     transition: 0.3s;
-    height: 100%;
 }
 
-.custom-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-}
-
-
-/* Feature Boxes */
-.feature-box {
-    background: white;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-    transition: all 0.3s ease;
-    height: 100%;
-    border-bottom: 5px solid transparent;
-}
-
-.feature-box:hover {
-    transform: translateY(-10px);
-    border-bottom: 5px solid var(--primary-color);
-}
-
-
-
-
-/* Stat Counter */
-.stat-section {
-    background: var(--dark-bg);
+footer a:hover {
     color: white;
-    padding: 60px 0;
 }
 
-/* Price Cards */
-.price-card {
-    border: none;
-    border-radius: 15px;
-    transition: 0.3s;
-    background: white;
-    overflow: hidden;
-    position: relative;
+
+footer .list-unstyled li {
+    margin-bottom: 10px;
 }
 
-.price-card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
-}
-
-.popular-badge {
-    position: absolute;
-    top: 20px;
-    right: -30px;
-    background: var(--accent-color);
-    color: #000;
-    padding: 5px 40px;
-    transform: rotate(45deg);
-    font-weight: bold;
-    font-size: 0.8rem;
-}
-
-/* Timeline Process */
-.timeline-step {
-    position: relative;
-    padding: 20px;
-    background: white;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    border-left: 4px solid var(--primary-color);
-}
-
-/* Section Header Styling */
+/* =========================================
+   ৩. কমন ইউআই এলিমেন্টস (Cards, Badges, Sections)
+   ========================================= */
 .section-title {
     text-align: center;
     margin-bottom: 50px;
@@ -151,206 +102,73 @@ body {
     border-radius: 2px;
 }
 
-
-/* Diagnostic Page Specific Styles */
-.diag-card {
-    border: none;
-    border-radius: 15px;
-    background: #fff;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-    height: 100%;
-}
-
-.diag-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-}
-
-.diag-icon {
-    width: 70px;
-    height: 70px;
-    background: rgba(13, 110, 253, 0.1);
-    color: var(--primary-color);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 30px;
-    margin-bottom: 20px;
-    transition: 0.3s;
-}
-
-.diag-card:hover .diag-icon {
-    background: var(--primary-color);
-    color: white;
-}
-
-.discount-badge {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    background: #dc3545;
-    color: white;
-    padding: 5px 15px;
-    border-radius: 20px;
-    font-weight: bold;
-    font-size: 0.8rem;
-}
-
-.test-list li {
-    font-size: 0.95rem;
-    color: #555;
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-}
-
-.test-list li i {
-    color: #198754;
-    margin-right: 10px;
-    font-size: 0.8rem;
-}
-
-.diagnostic-card-ui {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    background: #fff;
-}
-
-.diagnostic-card-ui:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1) !important;
-}
-
-.discount-badge-new {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: #ff3e3e;
-    color: #fff;
-    padding: 5px 15px;
-    border-radius: 50px;
-    font-size: 13px;
-    font-weight: bold;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-.search-box {
-    max-width: 600px;
-    margin: -75px auto 40px;
-    background: white;
-    padding: 10px;
-    border-radius: 50px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    position: relative;
-    z-index: 10;
-}
-
-.search-input {
-    border: none;
-    box-shadow: none;
-    padding-left: 20px;
-    font-size: 1.1rem;
-}
-
-.search-input:focus {
-    box-shadow: none;
-}
-
-
-/* Hospital Page Specific Styles */
+.custom-card,
+.diag-card,
 .doctor-card,
 .hospital-card {
     border: none;
     border-radius: 15px;
-    background: #fff;
+    background: white;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-    transition: all 0.3s ease;
-    overflow: hidden;
+    transition: 0.3s;
     height: 100%;
-    position: relative;
+    overflow: hidden;
 }
 
+.custom-card:hover,
+.diag-card:hover,
 .doctor-card:hover,
 .hospital-card:hover {
     transform: translateY(-10px);
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
 }
 
-.doctor-img-box {
-    height: 200px;
-    overflow: hidden;
-    background: #f0f2f5;
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-}
-
-.doctor-img-box img {
-    width: 100%;
-    object-fit: cover;
+.feature-box {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: var(--card-shadow);
     transition: 0.3s;
+    height: 100%;
+    border-bottom: 5px solid transparent;
 }
 
-.doctor-card:hover .doctor-img-box img {
-    transform: scale(1.05);
+.feature-box:hover {
+    transform: translateY(-10px);
+    border-bottom: 5px solid var(--primary-color);
 }
 
-.dept-icon-box {
-    width: 60px;
-    height: 60px;
-    background: rgba(13, 110, 253, 0.1);
-    color: var(--primary-color);
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    margin-bottom: 15px;
-    transition: 0.3s;
-}
-
-.dept-card:hover .dept-icon-box {
-    background: var(--primary-color);
-    color: white;
-}
-
-.discount-badge {
+.discount-badge,
+.discount-badge-new {
     position: absolute;
     top: 15px;
     right: 15px;
     background: #dc3545;
     color: white;
-    padding: 4px 12px;
+    padding: 5px 15px;
     border-radius: 20px;
-    font-size: 0.75rem;
     font-weight: bold;
+    font-size: 0.8rem;
     z-index: 2;
 }
 
-
-/* Pricing Card Styles */
-.pricing-section {
-    background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
-    font-family: 'Hind Siliguri', sans-serif;
-    /* Recommended for Bengali */
+.stat-section {
+    background: var(--dark-bg);
+    color: white;
+    padding: 60px 0;
 }
 
+/* =========================================
+   ৪. পেজ স্পেসিফিক স্টাইল (Pricing, Registration, Diagnostic)
+   ========================================= */
+
+/* Pricing */
+.price-card,
 .pricing-card {
-    border: none;
     border-radius: 20px;
-    transition: all 0.3s ease-in-out;
-    background: #fff;
-    box-shadow: var(--card-shadow);
     position: relative;
     overflow: hidden;
-}
-
-.pricing-card:hover {
-    transform: translateY(-10px);
-    box-shadow: var(--hover-shadow);
+    background: #fff;
 }
 
 .pricing-card.featured {
@@ -359,147 +177,27 @@ body {
     z-index: 1;
 }
 
-.pricing-card.featured:hover {
-    transform: translateY(-10px) scale(1.05);
-}
-
-.level-badge {
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-weight: 700;
-    padding: 5px 15px;
-    border-radius: 50px;
-    margin-bottom: 15px;
-    display: inline-block;
-}
-
 .price-tag {
     font-size: 2.5rem;
     font-weight: 800;
     color: #212529;
 }
 
-.price-tag span {
-    font-size: 1.2rem;
-    font-weight: 600;
-}
-
-.feature-list {
-    padding-left: 0;
-    list-style: none;
-    margin-top: 25px;
-}
-
-.feature-list li {
-    padding: 10px 0;
-    border-bottom: 1px solid #f1f1f1;
-    font-size: 0.95rem;
-    display: flex;
-    align-items: center;
-}
-
-.feature-list li:last-child {
-    border-bottom: none;
-}
-
-.feature-list i {
-    margin-right: 12px;
-    font-size: 1.1rem;
-}
-
-.popular-ribbon {
+.popular-ribbon,
+.popular-badge {
     position: absolute;
     top: 20px;
     right: -35px;
-    background: #ffc107;
+    background: var(--accent-color);
     color: #000;
     padding: 5px 40px;
     transform: rotate(45deg);
-    font-size: 0.8rem;
     font-weight: bold;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    font-size: 0.8rem;
 }
 
-.btn-pricing {
-    border-radius: 50px;
-    padding: 12px 30px;
-    font-weight: 600;
-    transition: all 0.3s;
-}
-
-.calc-alert {
-    border-radius: 15px;
-    border: none;
-    background: #e7f1ff;
-    color: #0c4128;
-}
-
-/* Specific Card Colors */
-.card-basic .pricing-header {
-    background: linear-gradient(135deg, #6c757d, #495057);
-}
-
-.card-standard .pricing-header {
-    background: linear-gradient(135deg, #0d6efd, #0056b3);
-}
-
-.card-premium .pricing-header {
-    background: linear-gradient(135deg, #198754, #146c43);
-}
-
-.card-ultra .pricing-header {
-    background: linear-gradient(135deg, #ffc107, #fd7e14);
-    color: #000;
-}
-
-/* Service Icon Box */
-.service-box {
-    background: white;
-    padding: 30px;
-    border-radius: 15px;
-    border-left: 5px solid var(--primary-color);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-    height: 100%;
-    transition: 0.3s;
-}
-
-.service-box:hover {
-    background: var(--primary-color);
-    color: white;
-}
-
-.service-box:hover .icon-box {
-    background: white;
-    color: var(--primary-color);
-}
-
-.icon-box {
-    width: 60px;
-    height: 60px;
-    background: rgba(13, 110, 253, 0.1);
-    color: var(--primary-color);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    margin-bottom: 20px;
-    transition: 0.3s;
-}
-
-/* Calculation Section */
-.calc-box {
-    background: #eef2f7;
-    border-radius: 15px;
-    padding: 20px;
-    border: 1px dashed #0d6efd;
-}
-
-
-/* Registration Page Specific Styles */
+/* Registration */
 .reg-card {
-    border: none;
     border-radius: 20px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
     overflow: hidden;
@@ -517,8 +215,7 @@ body {
     font-weight: 700;
     border-bottom: 2px solid #eee;
     padding-bottom: 10px;
-    margin-bottom: 20px;
-    margin-top: 20px;
+    margin: 20px 0;
     display: flex;
     align-items: center;
 }
@@ -534,69 +231,88 @@ body {
     margin-right: 15px;
 }
 
-.price-display {
-    background: #e7f1ff;
-    border: 1px dashed #0d6efd;
-    padding: 15px;
-    border-radius: 10px;
-    text-align: center;
-    margin-bottom: 20px;
+/* লগইন পেজ স্পেসিফিক সিএসএস */
+.login-page .login-icon-box {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
 }
 
-.form-control:focus,
-.form-select:focus {
+.login-page .x-small {
+    font-size: 0.8rem;
+}
+
+.login-page .cursor-pointer {
+    cursor: pointer;
+}
+
+.login-page .form-control:focus {
+    background-color: #fff;
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+    box-shadow: none;
 }
 
-.btn-register {
-    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-    border: none;
-    padding: 12px 30px;
-    font-size: 1.1rem;
+.login-page .input-group-text {
+    border-color: #dee2e6;
+    color: #6c757d;
+}
+
+.login-page .hover-link:hover {
+    color: var(--primary-color) !important;
+    text-decoration: underline !important;
+}
+
+/* scale-up animation */
+.login-page .scale-up {
+    animation: scaleUp 0.4s ease-out;
+}
+
+@keyframes scaleUp {
+    from {
+        transform: scale(0.95);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Diagnostic & Search */
+.diag-icon,
+.icon-box,
+.dept-icon-box {
+    width: 60px;
+    height: 60px;
+    background: rgba(13, 110, 253, 0.1);
+    color: var(--primary-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin-bottom: 20px;
     transition: 0.3s;
 }
 
-.btn-register:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+.search-box {
+    max-width: 600px;
+    margin: -75px auto 40px;
+    background: white;
+    padding: 10px;
+    border-radius: 50px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 10;
 }
 
-/* Footer */
-footer {
-    background: #1a1a1a;
-    color: #bbb;
-    padding: 60px 0 20px;
-}
-
-footer .navbar-brand {
-    display: block;
-    margin-bottom: 20px;
-}
-
-footer a {
-    color: #bbb;
-    text-decoration: none;
-}
-
-footer a:hover {
-    color: white;
-}
-
-/* otp page
- */
-.rounded-top-4 {
-    border-top-left-radius: 1.25rem !important;
-    border-top-right-radius: 1.25rem !important;
-}
-
-.alert-soft-warning {
-    background-color: #fff9e6;
-    color: #856404;
-    border: 1px solid #ffeeba;
-}
-
-/* OTP Box Design - Exactly as before */
+/* =========================================
+   ৫. অথেন্টিকেশন এবং পেমেন্ট (OTP, Payment, Status)
+   ========================================= */
 .otp-wrapper .otp-box {
     width: 60px;
     height: 70px;
@@ -606,76 +322,48 @@ footer a:hover {
     border: 2px solid #e0e0e0;
     border-radius: 12px;
     background-color: #f8f9fa;
-    transition: all 0.2s ease-in-out;
+    transition: 0.2s;
     outline: none;
 }
 
-/* Focus animation from first response */
 .otp-wrapper .otp-box:focus {
-    border-color: #0d6efd;
+    border-color: var(--primary-color);
     background-color: #fff;
-    box-shadow: 0 0 10px rgba(13, 110, 253, 0.15);
     transform: translateY(-2px);
-    /* This gives the lifting effect */
+    box-shadow: 0 0 10px rgba(13, 110, 253, 0.15);
 }
 
-/* Responsive */
-@media (max-width: 400px) {
-    .otp-wrapper .otp-box {
-        width: 50px;
-        height: 60px;
-        font-size: 1.5rem;
-    }
-}
-
-/* paymnet page */
 .payment-card {
     border: 2px solid #f0f0f0;
     border-radius: 12px;
     padding: 15px;
     text-align: center;
     cursor: pointer;
-    transition: all 0.3s ease;
-    background: #fff;
+    transition: 0.3s;
 }
 
-.payment-card:hover {
-    border-color: #0d6efd;
-    transform: translateY(-3px);
-}
-
+.payment-card:hover,
 .payment-card.active {
-    border-color: #0d6efd;
+    border-color: var(--primary-color);
     background-color: #f0f7ff;
-    box-shadow: 0 5px 15px rgba(13, 110, 253, 0.1);
 }
 
-.payment-card img {
-    height: 40px;
-    object-fit: contain;
-}
-
-.instruction-box {
-    border-left-width: 5px !important;
-}
-
-/* payment page */
-.status-top-bar {
-    height: 8px;
-    width: 100%;
-}
-
-.status-icon {
-    font-size: 80px;
-}
-
+/* =========================================
+   ৬. ইউটিলিটি এবং এনিমেশন
+   ========================================= */
 .rounded-4 {
-    border-radius: 1.5rem !important;
+    border-radius: 1.25rem !important;
 }
 
-/* এনিমেশনসমূহ */
-.fa-spin-slow {
-    animation: fa-spin 3s infinite linear;
+.rounded-top-4 {
+    border-top-left-radius: 1.25rem !important;
+    border-top-right-radius: 1.25rem !important;
+}
+
+.alert-soft-warning {
+    background-color: #fff9e6;
+    color: #856404;
+    border: 1px solid #ffeeba !important;
 }
 
 .animate-pulse {
@@ -690,7 +378,7 @@ footer a:hover {
     }
 
     50% {
-        opacity: .7;
+        opacity: .6;
     }
 }
 
@@ -710,7 +398,115 @@ footer a:hover {
     }
 }
 
-.alert-soft-warning {
-    background-color: #fff9e6;
-    border: 1px solid #ffeeba !important;
+/* =========================================
+   ৭. মিডিয়া কুয়েরি (Mobile)
+   ========================================= */
+@media (max-width: 400px) {
+    .otp-wrapper .otp-box {
+        width: 50px;
+        height: 60px;
+        font-size: 1.5rem;
+    }
+}
+
+/* user dashboard */
+/* ড্যাশবোর্ড স্ক্রোপড সিএসএস */
+.dashboard .dashboard-profile-header {
+    height: 100px;
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    border-bottom-left-radius: 50% 15%;
+    border-bottom-right-radius: 50% 15%;
+}
+
+.dashboard .dashboard-avatar-wrapper {
+    margin-top: -60px;
+    display: inline-block;
+}
+
+.dashboard .dashboard-avatar {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+}
+
+.dashboard .dashboard-verified-icon {
+    position: absolute;
+    bottom: 5px;
+    right: 15px;
+    background: white;
+    border-radius: 50%;
+    font-size: 20px;
+}
+
+/* সাইডবার সার্ভিস আইকন স্টাইল (আপনার ইমেজ অনুযায়ী) */
+.dashboard .dashboard-sidebar-icon {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+.dashboard .dashboard-sidebar-menu .list-group-item {
+    border-color: #f1f1f1;
+    transition: 0.2s ease;
+}
+
+.dashboard .dashboard-sidebar-menu .list-group-item-action:hover {
+    background-color: #f8faff;
+    border-left: 4px solid var(--primary-color);
+    padding-left: 1.25rem;
+}
+
+.dashboard .dashboard-menu-divider {
+    letter-spacing: 1px;
+    font-size: 0.7rem;
+}
+
+.dashboard .smaller {
+    font-size: 0.7rem;
+}
+
+/* কালার ইউটিলিটি */
+.dashboard .bg-primary-subtle {
+    background-color: #e7f1ff !important;
+}
+
+.dashboard .bg-success-subtle {
+    background-color: #e8f5e9 !important;
+}
+
+.dashboard .bg-info-subtle {
+    background-color: #e0f7fa !important;
+}
+
+.dashboard .bg-danger-subtle {
+    background-color: #ffebee !important;
+}
+
+.dashboard .dashboard-status-icon {
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+@media (max-width: 768px) {
+    .dashboard .dashboard-info-table td {
+        display: block;
+        width: 100% !important;
+        border: none;
+        padding: 5px 20px;
+    }
+
+    .dashboard .dashboard-info-table tr {
+        border-bottom: 1px solid #eee;
+        display: block;
+        padding: 10px 0;
+    }
 }

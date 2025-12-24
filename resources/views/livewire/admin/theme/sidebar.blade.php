@@ -143,6 +143,13 @@
                     </div>
                 </li>
 
+                <!-- user list -->
+                 <li class="nav-item">
+                    <a href="{{ route('admin.user.index') }}" class="nav-link menu-link {{ Route::is('admin.user.index') ? 'active' : '' }}" wire:navigate>
+                        <i class="bi bi-person"></i> <span data-key="t-users">Users</span>
+                    </a>
+                </li>
+
             </ul>
         </div>
         <!-- Sidebar -->
