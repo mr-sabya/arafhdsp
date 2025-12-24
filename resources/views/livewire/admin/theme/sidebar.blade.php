@@ -120,6 +120,9 @@
                             <li class="nav-item">
                                 <a href="{{ route('admin.hospital.doctors') }}" class="nav-link {{ Route::is('admin.hospital.doctors') ? 'active' : '' }}" data-key="t-doctors" wire:navigate> Doctors </a>
                             </li>
+                            <li class="nav-item">
+                                <a href="{{ route('admin.hospital.hospitals') }}" class="nav-link {{ Route::is('admin.hospital.hospitals') ? 'active' : '' }}" data-key="t-hospitals" wire:navigate> Hospitals </a>
+                            </li>
 
                         </ul>
                     </div>

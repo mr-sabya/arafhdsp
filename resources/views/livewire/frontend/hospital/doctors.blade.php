@@ -46,7 +46,7 @@
 
                 <!-- Doctor Image -->
                 <div class="doctor-img-box" style="height: 250px; overflow: hidden;">
-                    <img src="{{ $doctor->photo ? asset('storage/'.$doctor->photo) : asset('assets/images/default-doctor.jpg') }}"
+                    <img src="{{ $doctor->photo ? asset('storage/'.$doctor->photo) : asset('assets/frontend/images/default-doctor.jpg') }}"
                         alt="{{ $doctor->display_name }}"
                         class="w-100 h-100 object-fit-cover">
                 </div>

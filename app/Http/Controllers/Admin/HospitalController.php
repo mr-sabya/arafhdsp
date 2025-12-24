@@ -18,4 +18,10 @@ class HospitalController extends Controller
     {
         return view('admin.doctors.index');    
     }
+
+    // hospitals
+    public function hospitals()
+    {
+        return view('admin.hospitals.index');    
+    }
 }

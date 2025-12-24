@@ -47,11 +47,13 @@ Route::middleware('auth:admin')->group(function () {
 
 
     // Location Management
-    Route::prefix('hospitals')->name('hospital.')->group(function () {
+    Route::prefix('hospital')->name('hospital.')->group(function () {
         Route::get('/departmemts', [App\Http\Controllers\Admin\HospitalController::class, 'departments'])->name('departments');
 
         // doctors
         Route::get('/doctors', [App\Http\Controllers\Admin\HospitalController::class, 'doctors'])->name('doctors');
+
+        Route::get('/hospitals', [App\Http\Controllers\Admin\HospitalController::class, 'hospitals'])->name('hospitals');
 
     });
 
