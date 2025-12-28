@@ -17,6 +17,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'role_id',
         'password',
         'father_name',
         'mobile',
@@ -78,6 +79,20 @@ class User extends Authenticatable
 
     // --- Relationships ---
 
+    // Relationship
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    /**
+     * Helper to check roles for Panel Access
+     */
+    public function hasRole($slug)
+    {
+        return $this->role && $this->role->slug === $slug;
+    }
+
     public function bloodGroup()
     {
         return $this->belongsTo(BloodGroup::class);
@@ -115,9 +130,9 @@ class User extends Authenticatable
      */
     public function isActiveMember()
     {
-        return $this->is_verified && 
-               $this->application_status === 'approved' && 
-               !$this->isSubscriptionExpired();
+        return $this->is_verified &&
+            $this->application_status === 'approved' &&
+            !$this->isSubscriptionExpired();
     }
 
     /**
@@ -140,5 +155,23 @@ class User extends Authenticatable
             return 0;
         }
         return now()->diffInDays($this->subscription_expires_at);
+    }
+
+    // Individual helper methods for cleaner code
+    public function isHospital()
+    {
+        return $this->hasRole('hospital');
+    }
+    public function isDiagnostic()
+    {
+        return $this->hasRole('diagnostic');
+    }
+    public function isWorker()
+    {
+        return $this->hasRole('worker');
+    }
+    public function isDealer()
+    {
+        return $this->hasRole('dealer');
     }
 }
