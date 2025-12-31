@@ -21,15 +21,37 @@ class Login extends Component
     {
         $this->validate();
 
-        // মোবাইল নম্বর দিয়ে লগইন চেষ্টা (আপনার কলামের নাম mobile হলে এখানে mobile দিন)
         if (Auth::attempt(['mobile' => $this->phone, 'password' => $this->password], $this->remember)) {
             session()->flash('success', 'সফলভাবে লগইন হয়েছে!');
-            return $this->redirectIntended(route('user.dashboard'), navigate: true);
+
+            /** @var \App\Models\User $user */
+            $user = Auth::user();
+
+            // Logic to redirect based on Role Slug
+            return $this->redirectBasedOnRole($user);
         }
 
         throw ValidationException::withMessages([
             'phone' => 'আপনার দেওয়া তথ্যগুলো আমাদের রেকর্ডের সাথে মিলছে না।',
         ]);
+    }
+
+    /**
+     * Handle redirection logic based on user role
+     */
+    protected function redirectBasedOnRole($user)
+    {
+        // 1. Role Based Redirection
+        $route = match ($user->role->slug) {
+            'worker'     => route('worker.dashboard'),
+            'hospital'   => route('hospital.dashboard'),
+            'diagnostic' => route('diagnostic.dashboard'),
+            'dealer'     => route('dealer.dashboard'),
+            'member'     => route('user.dashboard'), // Regular Member
+            default      => route('user.dashboard'),
+        };
+
+        return $this->redirectIntended($route, navigate: true);
     }
 
     public function render()

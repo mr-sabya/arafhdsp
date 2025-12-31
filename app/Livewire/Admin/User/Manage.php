@@ -82,6 +82,37 @@ class Manage extends Component
     }
 
     // ... (Updated Address Chain Logic remains same as your original)
+    /**
+     * Address Chain Logic
+     * Triggered automatically by wire:model.live
+     */
+
+    public function updatedDivisionId($value)
+    {
+        // Load districts based on selected division
+        $this->districts = $value ? District::where('division_id', $value)->get() : [];
+
+        // Reset all dependent fields and their collections
+        $this->reset(['district_id', 'upazila_id', 'area_id', 'upazilas', 'areas']);
+    }
+
+    public function updatedDistrictId($value)
+    {
+        // Load upazilas based on selected district
+        $this->upazilas = $value ? Upazila::where('district_id', $value)->get() : [];
+
+        // Reset all dependent fields and their collections
+        $this->reset(['upazila_id', 'area_id', 'areas']);
+    }
+
+    public function updatedUpazilaId($value)
+    {
+        // Load areas based on selected upazila
+        $this->areas = $value ? Area::where('upazila_id', $value)->get() : [];
+
+        // Reset area selection
+        $this->reset(['area_id']);
+    }
 
     public function save()
     {
@@ -100,10 +131,15 @@ class Manage extends Component
 
         $this->validate($rules);
 
-        // Logic: Generate referral code if the user is a worker and doesn't have one
+        // 1. Fetch the Role to check the slug
         $selectedRole = Role::find($this->role_id);
-        $finalReferralCode = $this->referral_code;
 
+        // 2. Logic for is_verified (Member = false, Others = true)
+        // If you only want this to happen during CREATION, wrap it in if(!$this->isEditMode)
+        $isVerified = ($selectedRole && $selectedRole->slug !== 'member');
+
+        // 3. Logic for Referral Code (Only for Workers)
+        $finalReferralCode = $this->referral_code;
         if ($selectedRole && $selectedRole->slug === 'worker' && empty($this->referral_code)) {
             $finalReferralCode = User::generateReferralCode($this->name);
         }
@@ -117,6 +153,7 @@ class Manage extends Component
             'dob' => $this->dob,
             'blood_group_id' => $this->blood_group_id,
             'nid' => $this->nid,
+            'is_verified' => $isVerified,
             'referred_by' => $this->referred_by, // Link to the worker who referred them
             'referral_code' => $finalReferralCode, // This user's own referral code
             'division_id' => $this->division_id,

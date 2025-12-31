@@ -28,7 +28,7 @@ Route::middleware('guest')->group(function () {
 
     // Registration Routes
     Route::get('/register', [App\Http\Controllers\Frontend\AuthController::class, 'register'])->name('register');
-    
+
     Route::get('/verify-otp/{mobile}', [App\Http\Controllers\Frontend\AuthController::class, 'verify'])->name('verify.otp');
 });
 
@@ -41,3 +41,17 @@ Route::middleware('auth')->group(function () {
     // user dashboard
     Route::get('/user/dashboard', [App\Http\Controllers\Frontend\UserController::class, 'dashboard'])->name('user.dashboard');
 });
+
+// Field Worker Routes: domain.com/worker/...
+Route::middleware('auth')->prefix('worker')->name('worker.')->group(function () {
+    // dashboard
+    Route::get('/dashboard', [App\Http\Controllers\Worker\HomeController::class, 'index'])->name('dashboard');
+
+    Route::prefix('user')->name('user.')->group(function () {
+        Route::get('/', [App\Http\Controllers\Worker\UserController::class, 'index'])->name('index');
+        Route::get('/create', [App\Http\Controllers\Worker\UserController::class, 'create'])->name('create');
+    });
+});
+
+// Hospital/Diagnostic Routes: domain.com/partner/...
+Route::prefix('partner')->name('partner.')->group(...);
