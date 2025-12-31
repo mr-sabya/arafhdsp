@@ -1,7 +1,7 @@
 <div>
     <div class="row">
         <div class="col-md-12">
-            <div class="card border-0 shadow-sm">
+            <div class="card">
                 <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
                     <h5 class="mb-0 fw-bold text-dark">User Management</h5>
                     <div class="d-flex gap-2">
@@ -10,6 +10,9 @@
                             <input type="text" class="form-control bg-light border-start-0 shadow-none"
                                 wire:model.live.debounce.300ms="search" placeholder="Search by name, mobile or TrxID...">
                         </div>
+                        <a href="{{ route('admin.user.create') }}" wire:navigate class="btn btn-primary btn-sm rounded-pill px-3">
+                            <i class="ri-add-line"></i> Add New Doctor
+                        </a>
                     </div>
                 </div>
 
@@ -18,6 +21,7 @@
                         <thead class="bg-light">
                             <tr>
                                 <th class="ps-3">User Info</th>
+                                <th>Role</th>
                                 <th>Mobile</th>
                                 <th>Plan</th>
                                 <th>Payment</th>
@@ -38,6 +42,11 @@
                                             <small class="text-muted">ID: #{{ $user->id }}</small>
                                         </div>
                                     </div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-primary-subtle text-primary">
+                                        {{ $user->role['name'] }}
+                                    </span>
                                 </td>
                                 <td>{{ $user->mobile }}</td>
                                 <td>
@@ -81,6 +90,9 @@
                                     <button wire:click="openModal({{ $user->id }})" class="btn btn-sm btn-primary rounded-pill px-3 shadow-none">
                                         Manage
                                     </button>
+                                    <a href="{{ route('admin.user.edit', $user->id) }}" wire:navigate class="btn btn-sm btn-primary rounded-pill px-3 shadow-none">
+                                        Edit
+                                    </a>
                                 </td>
                             </tr>
                             @empty

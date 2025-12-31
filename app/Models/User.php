@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -12,13 +11,16 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     /**
-     * The attributes that are mass assignable.
+     * -------------------------------------------------------------------------
+     * Configuration & Attributes
+     * -------------------------------------------------------------------------
      */
+
     protected $fillable = [
         'name',
         'email',
-        'role_id',
         'password',
+        'role_id',
         'father_name',
         'mobile',
         'dob',
@@ -32,7 +34,7 @@ class User extends Authenticatable
         'upazila_id',
         'area_id',
 
-        // Subscription & Pricing Fields
+        // Subscription & Pricing
         'pricing_plan_id',
         'package_level',
         'family_members',
@@ -44,28 +46,26 @@ class User extends Authenticatable
         'is_verified',
 
         // Payment & Application Status
-        'payment_status',       // pending, paid, failed, pending_renewal
-        'application_status',   // pending, approved, rejected
+        'payment_status',
+        'application_status',
         'transaction_id',
         'payment_method',
 
         // Monthly Subscription Tracking
         'subscription_expires_at',
         'last_payment_date',
+
+        // Referral System
+        'referred_by',
+        'referral_code',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     */
     protected $hidden = [
         'password',
         'remember_token',
         'otp',
     ];
 
-    /**
-     * The attributes that should be cast.
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
@@ -77,20 +77,15 @@ class User extends Authenticatable
         'total_price' => 'decimal:2',
     ];
 
-    // --- Relationships ---
+    /**
+     * -------------------------------------------------------------------------
+     * Relationships
+     * -------------------------------------------------------------------------
+     */
 
-    // Relationship
     public function role()
     {
         return $this->belongsTo(Role::class);
-    }
-
-    /**
-     * Helper to check roles for Panel Access
-     */
-    public function hasRole($slug)
-    {
-        return $this->role && $this->role->slug === $slug;
     }
 
     public function bloodGroup()
@@ -98,66 +93,82 @@ class User extends Authenticatable
         return $this->belongsTo(BloodGroup::class);
     }
 
+    // Address Relationships
     public function division()
     {
         return $this->belongsTo(Division::class);
     }
-
     public function district()
     {
         return $this->belongsTo(District::class);
     }
-
     public function upazila()
     {
         return $this->belongsTo(Upazila::class);
     }
-
     public function area()
     {
         return $this->belongsTo(Area::class);
     }
 
+    // Business Logic Relationships
     public function pricingPlan()
     {
         return $this->belongsTo(PricingPlan::class);
     }
 
-    // --- Helper Methods (Accessors) ---
-
-    /**
-     * Check if the user is fully approved and subscription is active.
-     */
-    public function isActiveMember()
+    // Referral Relationships
+    public function referrer()
     {
-        return $this->is_verified &&
-            $this->application_status === 'approved' &&
-            !$this->isSubscriptionExpired();
+        return $this->belongsTo(User::class, 'referred_by');
+    }
+    public function referrals()
+    {
+        return $this->hasMany(User::class, 'referred_by');
     }
 
     /**
-     * Check if the monthly subscription has expired.
+     * -------------------------------------------------------------------------
+     * Scopes
+     * -------------------------------------------------------------------------
      */
-    public function isSubscriptionExpired()
+
+    public function scopeReferredBy($query, $workerId)
     {
-        if (!$this->subscription_expires_at) {
-            return true;
-        }
-        return now()->gt($this->subscription_expires_at);
+        return $query->where('referred_by', $workerId);
     }
 
     /**
-     * Get remaining days in current subscription.
+     * -------------------------------------------------------------------------
+     * Accessors & Mutators (Virtual Attributes)
+     * -------------------------------------------------------------------------
      */
-    public function subscriptionDaysLeft()
+
+    /**
+     * Get the count of successful referrals for a worker.
+     * Usage: $user->commission_count
+     */
+    public function getCommissionCountAttribute()
     {
-        if ($this->isSubscriptionExpired()) {
-            return 0;
-        }
-        return now()->diffInDays($this->subscription_expires_at);
+        if (!$this->isWorker()) return 0;
+
+        return $this->referrals()
+            ->where('application_status', 'approved')
+            ->where('payment_status', 'paid')
+            ->count();
     }
 
-    // Individual helper methods for cleaner code
+    /**
+     * -------------------------------------------------------------------------
+     * Role & Status Helpers
+     * -------------------------------------------------------------------------
+     */
+
+    public function hasRole($slug)
+    {
+        return $this->role && $this->role->slug === $slug;
+    }
+
     public function isHospital()
     {
         return $this->hasRole('hospital');
@@ -173,5 +184,54 @@ class User extends Authenticatable
     public function isDealer()
     {
         return $this->hasRole('dealer');
+    }
+
+    /**
+     * Check if the user is fully approved and subscription is active.
+     */
+    public function isActiveMember()
+    {
+        return $this->is_verified &&
+            $this->application_status === 'approved' &&
+            !$this->isSubscriptionExpired();
+    }
+
+    /**
+     * -------------------------------------------------------------------------
+     * Subscription Logic
+     * -------------------------------------------------------------------------
+     */
+
+    public function isSubscriptionExpired()
+    {
+        return !$this->subscription_expires_at || now()->gt($this->subscription_expires_at);
+    }
+
+    public function subscriptionDaysLeft()
+    {
+        if ($this->isSubscriptionExpired()) return 0;
+        return now()->diffInDays($this->subscription_expires_at);
+    }
+
+    /**
+     * -------------------------------------------------------------------------
+     * Referral System Logic
+     * -------------------------------------------------------------------------
+     */
+
+    /**
+     * Generate a unique referral code for a worker.
+     */
+    public static function generateReferralCode($name)
+    {
+        $prefix = strtoupper(substr($name, 0, 3));
+        $code = $prefix . str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT);
+
+        // Recursive check to ensure uniqueness
+        if (static::where('referral_code', $code)->exists()) {
+            return self::generateReferralCode($name);
+        }
+
+        return $code;
     }
 }

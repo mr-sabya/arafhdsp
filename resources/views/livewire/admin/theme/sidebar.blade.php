@@ -143,13 +143,24 @@
                     </div>
                 </li>
 
-                <!-- user list -->
-                 <li class="nav-item">
-                    <a href="{{ route('admin.user.index') }}" class="nav-link menu-link {{ Route::is('admin.user.index') ? 'active' : '' }}" wire:navigate>
-                        <i class="bi bi-person"></i> <span data-key="t-users">Users</span>
+                <!-- user management -->
+                <li class="nav-item">
+                    <a class="nav-link menu-link {{ Route::is('admin.user.*') ? 'collapsed active' : '' }}" href="#userManage" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarPages">
+                        <i class="bi bi-person"></i> <span data-key="t-user">User</span>
                     </a>
-                </li>
+                    <div class="collapse menu-dropdown {{ Route::is('admin.user.*') ? 'show' : '' }}" id="userManage">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="{{ route('admin.user.index') }}" class="nav-link {{ Route::is('admin.user.index') ? 'active' : '' }}" data-key="t-users" wire:navigate> User </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('admin.user.role.index') }}" class="nav-link {{ Route::is('admin.user.role.index') ? 'active' : '' }}" data-key="t-roles" wire:navigate> Roles </a>
+                            </li>
 
+                        </ul>
+                    </div>
+                </li>
             </ul>
         </div>
         <!-- Sidebar -->

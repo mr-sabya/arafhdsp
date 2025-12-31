@@ -54,14 +54,17 @@ Route::middleware('auth:admin')->group(function () {
         Route::get('/doctors', [App\Http\Controllers\Admin\HospitalController::class, 'doctors'])->name('doctors');
 
         Route::get('/hospitals', [App\Http\Controllers\Admin\HospitalController::class, 'hospitals'])->name('hospitals');
-
     });
 
     // Diagnostic Management
     Route::prefix('diagnostic')->name('diagnostic.')->group(function () {
         Route::get('/diagnostic-center', [App\Http\Controllers\Admin\DiagnosticController::class, 'index'])->name('index');
-        
     });
-    
-    Route::get('/users', [App\Http\Controllers\Admin\UserController::class, 'index'])->name('user.index');
+
+    Route::prefix('user')->name('user.')->group(function () {
+        Route::get('/', [App\Http\Controllers\Admin\UserController::class, 'index'])->name('index');
+        Route::get('/create', [App\Http\Controllers\Admin\UserController::class, 'create'])->name('create');
+        Route::get('/{id}/edit/', [App\Http\Controllers\Admin\UserController::class, 'edit'])->name('edit');
+        Route::get('/roles', [App\Http\Controllers\Admin\UserController::class, 'role'])->name('role.index');
+    });
 });
