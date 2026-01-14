@@ -161,6 +161,23 @@
                         </ul>
                     </div>
                 </li>
+
+                <!-- member management -->
+                <li class="nav-item">
+                    <a class="nav-link menu-link {{ Route::is('admin.member.*') ? 'collapsed active' : '' }}" href="#memberManage" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarPages">
+                        <i class="bi bi-people"></i> <span data-key="t-member">Member</span>
+                    </a>
+                    <div class="collapse menu-dropdown {{ Route::is('admin.member.*') ? 'show' : '' }}" id="memberManage">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="{{ route('admin.member.index') }}" class="nav-link {{ Route::is('admin.member.index') ? 'active' : '' }}" data-key="t-members" wire:navigate> Members </a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </li>
+
             </ul>
         </div>
         <!-- Sidebar -->

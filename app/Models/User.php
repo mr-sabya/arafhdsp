@@ -58,6 +58,9 @@ class User extends Authenticatable
         // Referral System
         'referred_by',
         'referral_code',
+
+        'hospital_id',
+        'diagnostic_center_id',
     ];
 
     protected $hidden = [
@@ -126,6 +129,17 @@ class User extends Authenticatable
     {
         return $this->hasMany(User::class, 'referred_by');
     }
+
+    public function hospital()
+    {
+        return $this->belongsTo(Hospital::class);
+    }
+
+    public function diagnosticCenter()
+    {
+        return $this->belongsTo(DiagnosticCenter::class);
+    }
+
 
     /**
      * -------------------------------------------------------------------------

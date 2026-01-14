@@ -15,21 +15,26 @@
                             <i class="fas fa-user-circle me-2"></i> ব্যক্তিগত তথ্য
                         </h5>
                         <div class="row g-3 mb-4">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label class="form-label fw-bold small">আবেদনকারীর নাম <span class="text-danger">*</span></label>
                                 <input type="text" wire:model="name" class="form-control shadow-none" placeholder="পূর্ণ নাম">
-                                @error('name') <span class="text-danger x-small text-danger d-block">{{ $message }}</span> @enderror
+                                @error('name') <span class="text-danger x-small d-block">{{ $message }}</span> @enderror
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label class="form-label fw-bold small">পিতা / স্বামীর নাম</label>
                                 <input type="text" wire:model="father_name" class="form-control shadow-none">
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label class="form-label fw-bold small">মোবাইল নম্বর <span class="text-danger">*</span></label>
                                 <input type="tel" wire:model="mobile" class="form-control shadow-none" placeholder="017xxxxxxxx">
-                                @error('mobile') <span class="text-danger x-small text-danger d-block">{{ $message }}</span> @enderror
+                                @error('mobile') <span class="text-danger x-small d-block">{{ $message }}</span> @enderror
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold small">এনআইডি (NID) নম্বর</label>
+                                <input type="number" wire:model="nid" class="form-control shadow-none" placeholder="এনআইডি নম্বর">
+                                @error('nid') <span class="text-danger x-small d-block">{{ $message }}</span> @enderror
+                            </div>
+                            <div class="col-md-4">
                                 <label class="form-label fw-bold small">রক্তের গ্রুপ <span class="text-danger">*</span></label>
                                 <select wire:model="blood_group_id" class="form-select shadow-none">
                                     <option value="">বাছাই করুন</option>
@@ -37,8 +42,9 @@
                                     <option value="{{ $group->id }}">{{ $group->name }} ({{ $group->bn_name }})</option>
                                     @endforeach
                                 </select>
+                                @error('blood_group_id') <span class="text-danger x-small d-block">{{ $message }}</span> @enderror
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <label class="form-label fw-bold small">জন্ম তারিখ</label>
                                 <input type="date" wire:model="dob" class="form-control shadow-none">
                             </div>
@@ -79,7 +85,22 @@
                             </div>
                         </div>
 
-                        <!-- Section 3: Package -->
+                        <!-- Section 3: Nominee Info (New) -->
+                        <h5 class="form-section-title mb-4 border-bottom pb-2 text-primary fw-bold">
+                            <i class="fas fa-users me-2"></i> নমিনি তথ্য
+                        </h5>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold small">নমিনির নাম</label>
+                                <input type="text" wire:model="nominee_name" class="form-control shadow-none" placeholder="নমিনির পূর্ণ নাম">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold small">আবেদনকারীর সাথে সম্পর্ক</label>
+                                <input type="text" wire:model="nominee_relation" class="form-control shadow-none" placeholder="যেমন: মা, বাবা, স্ত্রী">
+                            </div>
+                        </div>
+
+                        <!-- Section 4: Package -->
                         <h5 class="form-section-title mb-4 border-bottom pb-2 text-primary fw-bold">
                             <i class="fas fa-box-open me-2"></i> প্যাকেজ নির্বাচন ও হিসাব
                         </h5>
@@ -92,6 +113,7 @@
                                     <option value="{{ $plan->id }}">{{ $plan->name }} (৳{{ number_format($plan->price) }})</option>
                                     @endforeach
                                 </select>
+                                @error('pricing_plan_id') <span class="text-danger x-small d-block">{{ $message }}</span> @enderror
                             </div>
 
                             @if($selected_plan && $selected_plan->pricing_type === 'per_member')
@@ -115,7 +137,7 @@
                             </div>
                         </div>
 
-                        <!-- Section 4: Security -->
+                        <!-- Section 5: Security -->
                         <h5 class="form-section-title mb-4 border-bottom pb-2 text-primary fw-bold">
                             <i class="fas fa-shield-alt me-2"></i> নিরাপত্তা ও ছবি
                         </h5>
@@ -123,11 +145,12 @@
                             <div class="col-md-6">
                                 <label class="form-label fw-bold small">লগইন পাসওয়ার্ড <span class="text-danger">*</span></label>
                                 <input type="password" wire:model="password" class="form-control shadow-none" placeholder="পাসওয়ার্ড দিন">
-                                @error('password') <span class="text-danger x-small text-danger d-block">{{ $message }}</span> @enderror
+                                @error('password') <span class="text-danger x-small d-block">{{ $message }}</span> @enderror
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-bold small">সদস্যের ছবি</label>
                                 <input type="file" wire:model="photo" class="form-control shadow-none">
+                                @error('photo') <span class="text-danger x-small d-block">{{ $message }}</span> @enderror
                             </div>
                         </div>
 
@@ -137,7 +160,7 @@
                                 <label class="form-check-label small" for="termsCheck">
                                     আমি অঙ্গীকার করছি যে তথ্যগুলো সঠিক।
                                 </label>
-                                @error('terms') <div class="text-danger x-small text-danger d-block">{{ $message }}</div> @enderror
+                                @error('terms') <div class="text-danger x-small d-block">{{ $message }}</div> @enderror
                             </div>
 
                             <div class="d-grid">

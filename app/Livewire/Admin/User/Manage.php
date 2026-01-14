@@ -56,6 +56,12 @@ class Manage extends Component
     {
         $user = User::findOrFail($this->userId);
 
+        // নিরাপত্তা: অ্যাডমিন যদি কোনো মেম্বারকে এডিট করার চেষ্টা করে (যা এই ফর্মে অনুমোদিত নয়)
+        if ($user->role && $user->role->slug === 'member') {
+            session()->flash('error', 'সদস্যদের প্রোফাইল এখান থেকে এডিট করা সম্ভব নয়।');
+            return $this->redirect(route('admin.user.index'), navigate: true);
+        }
+
         $this->name = $user->name;
         $this->email = $user->email;
         $this->role_id = $user->role_id;
@@ -136,6 +142,11 @@ class Manage extends Component
 
         // 2. Logic for is_verified (Member = false, Others = true)
         // If you only want this to happen during CREATION, wrap it in if(!$this->isEditMode)
+        // গুরুত্বপূর্ণ: অ্যাডমিন যাতে ভুল করেও 'member' রোল দিয়ে ইউজার সেভ করতে না পারে
+        if ($selectedRole->slug === 'member') {
+            $this->addError('role_id', 'অ্যাডমিন প্যানেল থেকে সাধারণ সদস্য তৈরি করা সম্ভব নয়।');
+            return;
+        }
         $isVerified = ($selectedRole && $selectedRole->slug !== 'member');
 
         // 3. Logic for Referral Code (Only for Workers)
@@ -187,7 +198,7 @@ class Manage extends Component
     public function render()
     {
         return view('livewire.admin.user.manage', [
-            'roles' => Role::all(),
+            'roles' => Role::where('slug', '!=', 'member')->get(),
             'bloodGroups' => BloodGroup::all(),
             'divisions' => Division::all(),
             // Get all existing Field Workers to populate a "Referrer" dropdown

@@ -48,6 +48,11 @@ class Hospital extends Model
         return $this->belongsTo(Area::class);
     }
 
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
+
     // Dynamic Display Attributes
     public function getDisplayNameAttribute()
     {

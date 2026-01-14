@@ -47,6 +47,11 @@ class DiagnosticCenter extends Model
         return $this->belongsTo(Area::class);
     }
 
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
+
     // Localization Accessors
     public function getDisplayNameAttribute()
     {

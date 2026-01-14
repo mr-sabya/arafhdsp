@@ -67,4 +67,9 @@ Route::middleware('auth:admin')->group(function () {
         Route::get('/{id}/edit/', [App\Http\Controllers\Admin\UserController::class, 'edit'])->name('edit');
         Route::get('/roles', [App\Http\Controllers\Admin\UserController::class, 'role'])->name('role.index');
     });
+
+    // Member Management
+    Route::prefix('member')->name('member.')->group(function () {
+        Route::get('/', [App\Http\Controllers\Admin\MemberController::class, 'index'])->name('index');
+    });
 });

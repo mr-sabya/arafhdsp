@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Admin\User;
+namespace App\Livewire\Admin\Member;
 
 use App\Models\User;
 use Livewire\Component;
@@ -17,6 +17,7 @@ class Index extends Component
     // Form fields for update
     public $payment_status;
     public $application_status;
+    public $admin_note;
 
     protected $paginationTheme = 'bootstrap';
 
@@ -27,7 +28,7 @@ class Index extends Component
 
     public function openModal($id)
     {
-        $this->selectedUser = User::with(['pricingPlan', 'bloodGroup', 'division', 'district', 'role'])->findOrFail($id);
+        $this->selectedUser = User::with(['pricingPlan', 'bloodGroup', 'division', 'district'])->findOrFail($id);
         $this->payment_status = $this->selectedUser->payment_status;
         $this->application_status = $this->selectedUser->application_status;
         $this->isOpen = true;
@@ -51,15 +52,14 @@ class Index extends Component
             'application_status' => $this->application_status,
         ]);
 
-        session()->flash('success', 'ইউজারের স্ট্যাটাস সফলভাবে আপডেট হয়েছে।');
+        session()->flash('success', 'User status updated successfully.');
         $this->closeModal();
     }
 
     public function render()
     {
-        // ১. প্রথমে মেম্বার রোল বাদ দিয়ে কুয়েরি শুরু করুন
         $users = User::whereHas('role', function ($query) {
-            $query->where('slug', '!=', 'member');
+            $query->where('slug','member');
         })
             // ২. সার্চ লজিকটি একটি ফাংশনের ভেতর রাখুন যাতে 'OR' কন্ডিশন মেম্বারদের ইনক্লুড না করে
             ->where(function ($query) {
@@ -70,7 +70,7 @@ class Index extends Component
             ->latest()
             ->paginate(10);
 
-        return view('livewire.admin.user.index', [
+        return view('livewire.admin.member.index', [
             'users' => $users
         ]);
     }

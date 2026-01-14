@@ -50,6 +50,8 @@ Route::middleware('auth')->prefix('worker')->name('worker.')->group(function () 
     Route::prefix('user')->name('user.')->group(function () {
         Route::get('/', [App\Http\Controllers\Worker\UserController::class, 'index'])->name('index');
         Route::get('/create', [App\Http\Controllers\Worker\UserController::class, 'create'])->name('create');
+        Route::get('/verify-otp/{user_id}', [App\Http\Controllers\Worker\UserController::class, 'verifyOtp'])->name('verify');
+        Route::get('/process-payment/{user_id}', [App\Http\Controllers\Worker\UserController::class, 'processPayment'])->name('payment');
     });
 });
 

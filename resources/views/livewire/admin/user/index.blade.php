@@ -1,31 +1,29 @@
 <div>
     <div class="row">
         <div class="col-md-12">
-            <div class="card">
+            <div class="card border-0 shadow-sm">
                 <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0 fw-bold text-dark">User Management</h5>
+                    <h5 class="mb-0 fw-bold text-dark"><i class="ri-user-star-line me-1"></i> Staff & Partner Management</h5>
                     <div class="d-flex gap-2">
                         <div class="input-group input-group-sm" style="width: 300px;">
                             <span class="input-group-text bg-light border-end-0"><i class="ri-search-line"></i></span>
                             <input type="text" class="form-control bg-light border-start-0 shadow-none"
-                                wire:model.live.debounce.300ms="search" placeholder="Search by name, mobile or TrxID...">
+                                wire:model.live.debounce.300ms="search" placeholder="Search by name or mobile...">
                         </div>
                         <a href="{{ route('admin.user.create') }}" wire:navigate class="btn btn-primary btn-sm rounded-pill px-3">
-                            <i class="ri-add-line"></i> Add New Doctor
+                            <i class="ri-add-line"></i> Add New User
                         </a>
                     </div>
                 </div>
 
                 <div class="table-responsive">
                     <table class="table table-hover align-middle mb-0">
-                        <thead class="bg-light">
+                        <thead class="bg-light text-muted">
                             <tr>
                                 <th class="ps-3">User Info</th>
                                 <th>Role</th>
                                 <th>Mobile</th>
-                                <th>Plan</th>
-                                <th>Payment</th>
-                                <th>Application</th>
+                                <th>Specific Details</th>
                                 <th>Verification</th>
                                 <th class="text-end pe-3">Action</th>
                             </tr>
@@ -36,68 +34,60 @@
                                 <td class="ps-3">
                                     <div class="d-flex align-items-center">
                                         <img src="{{ $user->photo ? asset('storage/'.$user->photo) : asset('assets/frontend/images/default-user.png') }}"
-                                            class="rounded-circle me-2" style="width: 35px; height: 35px; object-fit: cover;">
+                                            class="rounded-circle me-2 border" style="width: 40px; height: 40px; object-fit: cover;">
                                         <div>
                                             <div class="fw-bold text-dark">{{ $user->name }}</div>
-                                            <small class="text-muted">ID: #{{ $user->id }}</small>
+                                            <small class="text-muted">UID: #{{ $user->id }}</small>
                                         </div>
                                     </div>
                                 </td>
                                 <td>
-                                    <span class="badge bg-primary-subtle text-primary">
-                                        {{ $user->role['name'] }}
+                                    <span class="badge bg-dark-subtle text-dark border">
+                                        {{ $user->role->name ?? 'N/A' }}
                                     </span>
                                 </td>
                                 <td>{{ $user->mobile }}</td>
                                 <td>
+                                    @if($user->role->slug == 'worker')
                                     <span class="badge bg-primary-subtle text-primary">
-                                        {{ $user->pricingPlan->name ?? 'N/A' }}
+                                        <i class="ri-team-line me-1"></i> Referrals: {{ $user->referrals()->count() }}
                                     </span>
-                                </td>
-                                <td>
-                                    @php
-                                    $p_class = match($user->payment_status) {
-                                    'paid' => 'bg-success',
-                                    'pending' => 'bg-warning',
-                                    default => 'bg-danger'
-                                    };
-                                    @endphp
-                                    <span class="badge {{ $p_class }}-subtle text-{{ str_replace('bg-', '', $p_class) }} text-capitalize">
-                                        {{ $user->payment_status }}
+                                    @elseif($user->role->slug == 'hospital' && $user->hospital)
+                                    <a href="#" class="text-decoration-none fw-bold text-info">
+                                        <i class="ri-hospital-line me-1"></i> {{ $user->hospital->name }}
+                                    </a>
+                                    @elseif($user->role->slug == 'diagnostic' && $user->diagnosticCenter)
+                                    <span class="fw-bold text-warning">
+                                        <i class="ri-microscope-line me-1"></i> {{ $user->diagnosticCenter->name }}
                                     </span>
-                                </td>
-                                <td>
-                                    @php
-                                    $a_class = match($user->application_status) {
-                                    'approved' => 'bg-success',
-                                    'pending' => 'bg-info',
-                                    'rejected' => 'bg-danger',
-                                    default => 'bg-secondary'
-                                    };
-                                    @endphp
-                                    <span class="badge {{ $a_class }}-subtle text-{{ str_replace('bg-', '', $a_class) }} text-capitalize">
-                                        {{ $user->application_status }}
-                                    </span>
+                                    @else
+                                    <span class="text-muted small">N/A</span>
+                                    @endif
                                 </td>
                                 <td>
                                     @if($user->is_verified)
-                                    <i class="ri-checkbox-circle-fill text-success fs-5"></i>
+                                    <span class="badge bg-success-subtle text-success"><i class="ri-verified-badge-fill me-1"></i> Verified</span>
                                     @else
-                                    <i class="ri-close-circle-fill text-muted fs-5"></i>
+                                    <span class="badge bg-secondary-subtle text-muted">Unverified</span>
                                     @endif
                                 </td>
                                 <td class="text-end pe-3">
-                                    <button wire:click="openModal({{ $user->id }})" class="btn btn-sm btn-primary rounded-pill px-3 shadow-none">
-                                        Manage
-                                    </button>
-                                    <a href="{{ route('admin.user.edit', $user->id) }}" wire:navigate class="btn btn-sm btn-primary rounded-pill px-3 shadow-none">
-                                        Edit
-                                    </a>
+                                    <div class="btn-group shadow-sm rounded-pill overflow-hidden">
+                                        <button wire:click="openModal({{ $user->id }})" class="btn btn-sm btn-white border-end">
+                                            <i class="ri-eye-line text-primary"></i>
+                                        </button>
+                                        <a href="{{ route('admin.user.edit', $user->id) }}" wire:navigate class="btn btn-sm btn-white">
+                                            <i class="ri-edit-line text-info"></i>
+                                        </a>
+                                    </div>
                                 </td>
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="7" class="text-center py-5 text-muted">No users found.</td>
+                                <td colspan="6" class="text-center py-5">
+                                    <img src="{{ asset('assets/admin/images/no-data.png') }}" alt="" style="width: 100px; opacity: 0.5;">
+                                    <p class="text-muted mt-2">No users found in this criteria.</p>
+                                </td>
                             </tr>
                             @endforelse
                         </tbody>
@@ -108,24 +98,22 @@
         </div>
     </div>
 
-    <!-- User Details & Status Update Modal -->
-    <!-- User Details & Full Info Modal -->
+    <!-- User Details Modal (View Only) -->
     @if($isOpen)
     <div class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.6); overflow-y: auto;">
-        <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content border-0 shadow-lg rounded-4">
-                <!-- Header -->
                 <div class="modal-header p-4 border-bottom bg-light rounded-top-4">
                     <div class="d-flex align-items-center">
                         <img src="{{ $selectedUser->photo ? asset('storage/'.$selectedUser->photo) : asset('assets/frontend/images/default-user.png') }}"
                             class="rounded-circle border border-3 border-white shadow-sm me-3"
-                            style="width: 60px; height: 60px; object-fit: cover;">
+                            style="width: 65px; height: 65px; object-fit: cover;">
                         <div>
-                            <h5 class="modal-title fw-bold mb-0">{{ $selectedUser->name }}</h5>
-                            <span class="badge bg-primary-subtle text-primary small">User ID: #{{ $selectedUser->id }}</span>
-                            @if($selectedUser->is_verified)
-                            <span class="badge bg-success-subtle text-success small"><i class="ri-verified-badge-line"></i> Verified</span>
-                            @endif
+                            <h5 class="modal-title fw-bold mb-0 text-dark">{{ $selectedUser->name }}</h5>
+                            <div class="mt-1">
+                                <span class="badge bg-primary">{{ $selectedUser->role->name }}</span>
+                                <span class="badge bg-light text-dark border ms-1">ID: #{{ $selectedUser->id }}</span>
+                            </div>
                         </div>
                     </div>
                     <button type="button" class="btn-close" wire:click="closeModal"></button>
@@ -133,91 +121,92 @@
 
                 <div class="modal-body p-4">
                     <div class="row g-4">
-                        <!-- Column 1: Personal Information -->
-                        <div class="col-md-4">
-                            <div class="card h-100 border shadow-none rounded-3">
-                                <div class="card-body">
-                                    <h6 class="fw-bold mb-3 text-primary border-bottom pb-2"><i class="ri-user-line me-1"></i> Personal Info</h6>
-                                    <div class="mb-2"><small class="text-muted d-block">Father's Name</small><span class="fw-semibold">{{ $selectedUser->father_name ?? 'N/A' }}</span></div>
-                                    <div class="mb-2"><small class="text-muted d-block">Email Address</small><span class="fw-semibold">{{ $selectedUser->email ?? 'N/A' }}</span></div>
-                                    <div class="mb-2"><small class="text-muted d-block">Mobile</small><span class="fw-semibold">{{ $selectedUser->mobile }}</span></div>
-                                    <div class="mb-2"><small class="text-muted d-block">Date of Birth</small><span class="fw-semibold">{{ $selectedUser->dob ? $selectedUser->dob->format('d M, Y') : 'N/A' }}</span></div>
-                                    <div class="mb-2"><small class="text-muted d-block">NID Number</small><span class="fw-semibold">{{ $selectedUser->nid }}</span></div>
-                                    <div class="mb-0"><small class="text-muted d-block">Blood Group</small><span class="badge bg-danger text-white">{{ $selectedUser->bloodGroup->name ?? 'N/A' }}</span></div>
-                                </div>
-                            </div>
+                        <!-- Left Side: Basic Info -->
+                        <div class="col-md-6">
+                            <h6 class="fw-bold mb-3 text-primary border-bottom pb-2">
+                                <i class="ri-information-line me-1"></i> Basic Information
+                            </h6>
+                            <table class="table table-sm table-borderless small">
+                                <tr>
+                                    <td class="text-muted" width="40%">Father's Name:</td>
+                                    <td class="fw-bold">{{ $selectedUser->father_name ?? 'N/A' }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-muted">Mobile:</td>
+                                    <td class="fw-bold">{{ $selectedUser->mobile }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-muted">Email:</td>
+                                    <td class="fw-bold">{{ $selectedUser->email ?? 'N/A' }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-muted">NID Number:</td>
+                                    <td class="fw-bold">{{ $selectedUser->nid ?? 'N/A' }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-muted">Date of Birth:</td>
+                                    <td class="fw-bold">{{ $selectedUser->dob ? $selectedUser->dob->format('d M, Y') : 'N/A' }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-muted">Blood Group:</td>
+                                    <td><span class="badge bg-danger">{{ $selectedUser->bloodGroup->name ?? 'N/A' }}</span></td>
+                                </tr>
+                            </table>
                         </div>
 
-                        <!-- Column 2: Address & Location -->
-                        <div class="col-md-4">
-                            <div class="card h-100 border shadow-none rounded-3">
-                                <div class="card-body">
-                                    <h6 class="fw-bold mb-3 text-primary border-bottom pb-2"><i class="ri-map-pin-line me-1"></i> Address Detail</h6>
-                                    <div class="mb-2"><small class="text-muted d-block">Division</small><span class="fw-semibold">{{ $selectedUser->division->name ?? 'N/A' }}</span></div>
-                                    <div class="mb-2"><small class="text-muted d-block">District</small><span class="fw-semibold">{{ $selectedUser->district->name ?? 'N/A' }}</span></div>
-                                    <div class="mb-2"><small class="text-muted d-block">Upazila</small><span class="fw-semibold">{{ $selectedUser->upazila->name ?? 'N/A' }}</span></div>
-                                    <div class="mb-2"><small class="text-muted d-block">Area / Village</small><span class="fw-semibold">{{ $selectedUser->area->name ?? 'N/A' }}</span></div>
-                                    <hr>
-                                    <h6 class="fw-bold mb-2 text-primary small text-uppercase">Subscription Details</h6>
-                                    <div class="mb-2"><small class="text-muted d-block">Package</small><span class="fw-bold text-success">{{ $selectedUser->pricingPlan->name ?? 'N/A' }}</span></div>
-                                    <div class="mb-0"><small class="text-muted d-block">Total Family Members</small><span class="fw-bold">{{ $selectedUser->family_members }} Person</span></div>
+                        <!-- Right Side: Role Specific & Address -->
+                        <div class="col-md-6">
+                            <h6 class="fw-bold mb-3 text-primary border-bottom pb-2">
+                                <i class="ri-map-pin-line me-1"></i> Address & Role Details
+                            </h6>
+                            <table class="table table-sm table-borderless small mb-3">
+                                <tr>
+                                    <td class="text-muted" width="40%">Division:</td>
+                                    <td class="fw-bold">{{ $selectedUser->division->name ?? 'N/A' }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-muted">District:</td>
+                                    <td class="fw-bold">{{ $selectedUser->district->name ?? 'N/A' }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-muted">Upazila:</td>
+                                    <td class="fw-bold">{{ $selectedUser->upazila->name ?? 'N/A' }}</td>
+                                </tr>
+                            </table>
+
+                            <div class="bg-light p-3 rounded-3 border">
+                                <h6 class="fw-bold text-dark small text-uppercase mb-2">Role Performance/Entity</h6>
+                                @if($selectedUser->role->slug == 'worker')
+                                <div class="d-flex justify-content-between">
+                                    <span>Total Referrals:</span>
+                                    <span class="fw-bold text-primary">{{ $selectedUser->referrals()->count() }} Members</span>
                                 </div>
-                            </div>
-                        </div>
-
-                        <!-- Column 3: Payment & Approval (Action) -->
-                        <div class="col-md-4">
-                            <div class="card h-100 border border-primary-subtle shadow-none rounded-3 bg-primary-subtle bg-opacity-10">
-                                <div class="card-body">
-                                    <h6 class="fw-bold mb-3 text-primary border-bottom pb-2"><i class="ri-bank-card-line me-1"></i> Payment & Actions</h6>
-
-                                    <div class="p-3 bg-white rounded-3 border mb-3">
-                                        <div class="d-flex justify-content-between mb-2 small"><span class="text-muted">Transaction ID:</span><span class="fw-bold text-dark">{{ $selectedUser->transaction_id ?? 'N/A' }}</span></div>
-                                        <div class="d-flex justify-content-between mb-2 small"><span class="text-muted">Method:</span><span class="fw-bold text-uppercase">{{ $selectedUser->payment_method ?? 'N/A' }}</span></div>
-                                        <div class="d-flex justify-content-between small"><span class="text-muted">Total Amount:</span><span class="fw-bold text-primary">৳{{ number_format($selectedUser->total_price, 2) }}</span></div>
-                                    </div>
-
-                                    <form wire:submit.prevent="updateStatus">
-                                        <div class="mb-3">
-                                            <label class="form-label small fw-bold">Payment Status</label>
-                                            <select class="form-select form-select-sm" wire:model="payment_status">
-                                                <option value="pending">Pending</option>
-                                                <option value="paid">Paid (Verified)</option>
-                                                <option value="failed">Failed / Cancelled</option>
-                                            </select>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label small fw-bold">Application Status</label>
-                                            <select class="form-select form-select-sm" wire:model="application_status">
-                                                <option value="pending">Under Review</option>
-                                                <option value="approved">Approved / Active</option>
-                                                <option value="rejected">Rejected</option>
-                                            </select>
-                                        </div>
-
-                                        <div class="d-grid mt-4">
-                                            <button type="submit" class="btn btn-primary rounded-pill py-2 fw-bold shadow">
-                                                <i class="ri-save-line me-1"></i> Update User Status
-                                            </button>
-                                        </div>
-                                    </form>
-
-                                    @if($selectedUser->last_payment_date)
-                                    <div class="mt-3 text-center">
-                                        <small class="text-muted">Last Updated: {{ $selectedUser->last_payment_date->format('d M Y, h:i A') }}</small>
-                                    </div>
-                                    @endif
+                                <div class="d-flex justify-content-between mt-1">
+                                    <span>Referral Code:</span>
+                                    <span class="badge bg-dark">{{ $selectedUser->referral_code ?? 'None' }}</span>
                                 </div>
+                                @elseif($selectedUser->role->slug == 'hospital' && $selectedUser->hospital)
+                                <div class="text-center">
+                                    <i class="ri-hospital-fill text-info fs-3"></i>
+                                    <p class="fw-bold mb-0">{{ $selectedUser->hospital->name }}</p>
+                                    <small class="text-muted">Linked Hospital Entity</small>
+                                </div>
+                                @elseif($selectedUser->role->slug == 'diagnostic' && $selectedUser->diagnosticCenter)
+                                <div class="text-center">
+                                    <i class="ri-microscope-fill text-warning fs-3"></i>
+                                    <p class="fw-bold mb-0">{{ $selectedUser->diagnosticCenter->name }}</p>
+                                    <small class="text-muted">Linked Diagnostic Center</small>
+                                </div>
+                                @else
+                                <p class="text-muted small text-center mb-0">No entity linked</p>
+                                @endif
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="modal-footer bg-light border-top-0 rounded-bottom-4 py-3 px-4">
-                    <div class="me-auto">
-                        <small class="text-muted">Registered at: {{ $selectedUser->created_at->format('d/m/Y h:i A') }}</small>
-                    </div>
-                    <button type="button" class="btn btn-outline-secondary rounded-pill px-4" wire:click="closeModal">Close Details</button>
+                <div class="modal-footer bg-light border-top-0 rounded-bottom-4">
+                    <button type="button" class="btn btn-secondary rounded-pill px-4" wire:click="closeModal">Close Window</button>
                 </div>
             </div>
         </div>
