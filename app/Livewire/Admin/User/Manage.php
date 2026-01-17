@@ -9,6 +9,8 @@ use App\Models\Division;
 use App\Models\District;
 use App\Models\Upazila;
 use App\Models\Area;
+use App\Models\DiagnosticCenter;
+use App\Models\Hospital;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -26,6 +28,7 @@ class Manage extends Component
     // Model Fields
     public $name, $email, $role_id, $password, $father_name, $mobile, $dob, $blood_group_id, $nid;
     public $photo, $existingPhoto;
+    public $hospital_id, $diagnostic_center_id;
 
     // Referral Fields
     public $referred_by; // ID of the worker who referred this user
@@ -33,12 +36,18 @@ class Manage extends Component
 
     // Address Fields
     public $division_id, $district_id, $upazila_id, $area_id;
+    public $hospitals = [], $diagnostics = [];
+
 
     // Dropdown Collections
     public $districts = [], $upazilas = [], $areas = [];
 
     public function mount($userId = null)
     {
+        // Initialize collections
+        $this->hospitals = Hospital::all();
+        $this->diagnostics = DiagnosticCenter::all();
+
         if ($userId) {
             $this->userId = $userId;
             $this->isEditMode = true;
@@ -82,6 +91,9 @@ class Manage extends Component
         $this->upazila_id = $user->upazila_id;
         $this->area_id = $user->area_id;
 
+        $this->hospital_id = $user->hospital_id;
+        $this->diagnostic_center_id = $user->diagnostic_center_id;
+
         if ($this->division_id) $this->districts = District::where('division_id', $this->division_id)->get();
         if ($this->district_id) $this->upazilas = Upazila::where('district_id', $this->district_id)->get();
         if ($this->upazila_id) $this->areas = Area::where('upazila_id', $this->upazila_id)->get();
@@ -120,6 +132,16 @@ class Manage extends Component
         $this->reset(['area_id']);
     }
 
+    // This method runs automatically when role_id changes via wire:model.live
+    public function updatedRoleId($value)
+    {
+        $role = Role::find($value);
+
+        // Reset IDs if the role changes to something else
+        if (!$role || $role->slug !== 'hospital') $this->hospital_id = null;
+        if (!$role || $role->slug !== 'diagnostic') $this->diagnostic_center_id = null;
+    }
+
     public function save()
     {
         $rules = [
@@ -139,6 +161,14 @@ class Manage extends Component
 
         // 1. Fetch the Role to check the slug
         $selectedRole = Role::find($this->role_id);
+
+        // Conditional validation
+        if ($selectedRole?->slug === 'hospital') {
+            $rules['hospital_id'] = 'required|exists:hospitals,id';
+        }
+        if ($selectedRole?->slug === 'diagnostic') {
+            $rules['diagnostic_center_id'] = 'required|exists:diagnostic_centers,id';
+        }
 
         // 2. Logic for is_verified (Member = false, Others = true)
         // If you only want this to happen during CREATION, wrap it in if(!$this->isEditMode)
@@ -171,6 +201,8 @@ class Manage extends Component
             'district_id' => $this->district_id,
             'upazila_id' => $this->upazila_id,
             'area_id' => $this->area_id,
+            'hospital_id' => ($selectedRole?->slug === 'hospital') ? $this->hospital_id : null,
+            'diagnostic_center_id' => ($selectedRole?->slug === 'diagnostic') ? $this->diagnostic_center_id : null,
         ];
 
         if (!empty($this->password)) {

@@ -57,9 +57,11 @@
                                         @endforeach
                                     </select>
                                 </div>
+                                <!-- Inside your form, where the Role dropdown is -->
                                 <div class="col-md-4">
                                     <label class="form-label small fw-bold">User Role</label>
-                                    <select class="form-select" wire:model="role_id">
+                                    <!-- Note the .live modifier -->
+                                    <select class="form-select" wire:model.live="role_id">
                                         <option value="">Select Role</option>
                                         @foreach($roles as $role)
                                         <option value="{{ $role->id }}">{{ $role->name }}</option>
@@ -68,6 +70,37 @@
                                     @error('role_id') <span class="text-danger x-small">{{ $message }}</span> @enderror
                                 </div>
 
+                                @php
+                                $currentRoleSlug = \App\Models\Role::find($role_id)?->slug;
+                                @endphp
+
+                                <!-- Conditional Hospital Dropdown -->
+                                @if($currentRoleSlug === 'hospital')
+                                <div class="col-md-4">
+                                    <label class="form-label small fw-bold text-primary">Assign Hospital</label>
+                                    <select class="form-select border-primary" wire:model="hospital_id">
+                                        <option value="">-- Select Hospital --</option>
+                                        @foreach($hospitals as $hospital)
+                                        <option value="{{ $hospital->id }}">{{ $hospital->name_bn }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('hospital_id') <span class="text-danger x-small">{{ $message }}</span> @enderror
+                                </div>
+                                @endif
+
+                                <!-- Conditional Diagnostic Center Dropdown -->
+                                @if($currentRoleSlug === 'diagnostic')
+                                <div class="col-md-4">
+                                    <label class="form-label small fw-bold text-primary">Assign Diagnostic Center</label>
+                                    <select class="form-select border-primary" wire:model="diagnostic_center_id">
+                                        <option value="">-- Select Center --</option>
+                                        @foreach($diagnostics as $center)
+                                        <option value="{{ $center->id }}">{{ $center->name_bn }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('diagnostic_center_id') <span class="text-danger x-small">{{ $message }}</span> @enderror
+                                </div>
+                                @endif
                             </div>
                         </div>
 
