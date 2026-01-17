@@ -248,4 +248,58 @@ class User extends Authenticatable
 
         return $code;
     }
+
+
+    /**
+     * Relationship to Service Usage Logs
+     */
+    public function serviceUsages()
+    {
+        return $this->hasMany(ServiceUsage::class, 'user_id');
+    }
+
+    /**
+     * Helper: Get usage count for a specific service within its plan frequency
+     */
+    public function getServiceUsageCount($serviceSlug)
+    {
+        $service = Service::where('slug', $serviceSlug)->first();
+        if (!$service || !$this->pricingPlan) return 0;
+
+        $planEntitlement = $this->pricingPlan->services()->where('service_id', $service->id)->first();
+        if (!$planEntitlement) return 0;
+
+        $frequency = $planEntitlement->pivot->frequency;
+
+        $query = $this->serviceUsages()->where('service_id', $service->id);
+
+        if ($frequency === 'monthly') {
+            $query->whereMonth('consumed_at', now()->month)
+                ->whereYear('consumed_at', now()->year);
+        } elseif ($frequency === 'yearly') {
+            $query->whereYear('consumed_at', now()->year);
+        }
+
+        return $query->count();
+    }
+
+    /**
+     * Helper: Check if a user has remaining quota for a service
+     */
+    public function hasServiceQuota($serviceSlug)
+    {
+        $service = Service::where('slug', $serviceSlug)->first();
+        if (!$service) return false;
+
+        // Discount types are always available if they are in the plan
+        if ($service->type === 'discount') {
+            return $this->pricingPlan->services()->where('service_id', $service->id)->exists();
+        }
+
+        // Limit types: compare usage vs plan quantity
+        $planEntitlement = $this->pricingPlan->services()->where('service_id', $service->id)->first();
+        if (!$planEntitlement) return false;
+
+        return $this->getServiceUsageCount($serviceSlug) < $planEntitlement->pivot->quantity;
+    }
 }

@@ -48,4 +48,12 @@ class PricingPlan extends Model
     {
         return $query->where('status', true);
     }
+
+
+    // New Relationship: Dynamic Services
+    public function services()
+    {
+        return $this->belongsToMany(Service::class, 'plan_service')
+            ->withPivot('quantity', 'frequency', 'discount_value');
+    }
 }

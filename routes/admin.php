@@ -43,6 +43,10 @@ Route::middleware('auth:admin')->group(function () {
 
     // pricing plan
     Route::get('/pricing-plan', [App\Http\Controllers\Admin\PricingPlanController::class, 'index'])->name('pricing.index');
+    // service
+    Route::get('/services', [App\Http\Controllers\Admin\PricingPlanController::class, 'service'])->name('service.index');
+    
+
     Route::get('/payment-methods', [App\Http\Controllers\Admin\PaymentMethodController::class, 'index'])->name('payment-method.index');
 
 

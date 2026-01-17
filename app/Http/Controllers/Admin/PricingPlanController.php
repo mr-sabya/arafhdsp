@@ -12,4 +12,10 @@ class PricingPlanController extends Controller
     {
         return view('admin.pricing-plan.index');    
     }
+
+    // service
+    public function service()
+    {
+        return view('admin.service.index');    
+    }
 }

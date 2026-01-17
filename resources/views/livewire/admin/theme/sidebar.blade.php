@@ -46,24 +46,7 @@
                         aria-expanded="false" aria-controls="sidebarPages">
                         <i class="bi bi-journal-medical"></i> <span data-key="t-webiste">Website</span>
                     </a>
-                    <div class="collapse menu-dropdown {{ Route::is('admin.website.*') ? 'show' : '' }}" id="websiteManage">
-                        <ul class="nav nav-sm flex-column">
-                            <li class="nav-item">
-                                <a href="{{ route('admin.website.hero-banner.index') }}" class="nav-link {{ Route::is('admin.website.hero-banner.index') ? 'active' : '' }}" data-key="t-hero-banner" wire:navigate> Hero Banner </a>
-                            </li>
 
-                            <li class="nav-item">
-                                <a href="{{ route('admin.website.service-section.index') }}" class="nav-link {{ Route::is('admin.website.service-section.index') ? 'active' : '' }}" data-key="t-service-section" wire:navigate> Service Section </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ route('admin.website.service.index') }}" class="nav-link {{ Route::is('admin.website.service.index') ? 'active' : '' }}" data-key="t-services" wire:navigate> Services </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ route('admin.website.skill.index') }}" class="nav-link {{ Route::is('admin.website.skill.index') ? 'active' : '' }}" data-key="t-skills" wire:navigate> Skills </a>
-                            </li>
-
-                        </ul>
-                    </div>
                 </li>
 
                 <!-- Location Management -->
@@ -95,11 +78,24 @@
                         <i class="bi bi-droplet-half"></i> <span data-key="t-blood-group">Blood Group</span>
                     </a>
                 </li>
+                <!-- pricing plans and services -->
                 <li class="nav-item">
-                    <a href="{{ route('admin.pricing.index') }}" class="nav-link menu-link {{ Route::is('admin.pricing.index') ? 'active' : '' }}" wire:navigate>
-                        <i class="bi bi-tags"></i> <span data-key="t-pricing-plan">Pricing Plan</span>
+                    <a class="nav-link menu-link {{ Route::is('admin.pricing.index') || Route::is('admin.service.index') ? 'collapsed active' : '' }}" href="#pricingPlans" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarPages">
+                        <i class="bi bi-tags"></i> <span data-key="t-pricing-plans">Pricing Plans</span>
                     </a>
+                    <div class="collapse menu-dropdown {{ Route::is('admin.pricing.index') || Route::is('admin.service.index') ? 'show' : '' }}" id="pricingPlans">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="{{ route('admin.pricing.index') }}" class="nav-link {{ Route::is('admin.pricing.index') ? 'active' : '' }}" data-key="t-pricing-plans" wire:navigate> Pricing Plans </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('admin.service.index') }}" class="nav-link {{ Route::is('admin.service.index') ? 'active' : '' }}" data-key="t-services" wire:navigate> Services </a>
+                            </li>
+                        </ul>
+                    </div>
                 </li>
+
                 <li class="nav-item">
                     <a href="{{ route('admin.payment-method.index') }}" class="nav-link menu-link {{ Route::is('admin.payment-method.index') ? 'active' : '' }}" wire:navigate>
                         <i class="bi bi-credit-card"></i> <span data-key="t-payment-method">Payment Method</span>

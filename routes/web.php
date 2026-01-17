@@ -55,5 +55,11 @@ Route::middleware('auth')->prefix('worker')->name('worker.')->group(function () 
     });
 });
 
+// hospital routes
+Route::middleware('auth')->prefix('hospital')->name('hospital.')->group(function () {
+    // dashboard
+    Route::get('/dashboard', [App\Http\Controllers\Hospital\HomeController::class, 'index'])->name('dashboard');
+});
+
 // Hospital/Diagnostic Routes: domain.com/partner/...
 Route::prefix('partner')->name('partner.')->group(...);
