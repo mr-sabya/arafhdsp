@@ -341,7 +341,7 @@
                                 class="align-middle">Settings</span></a>
 
                         <!-- logout -->
-                        <livewire:admin.auth.logout />
+                        <livewire:user.auth.logout />
                     </div>
                 </div>
             </div>

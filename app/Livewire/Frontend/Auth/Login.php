@@ -41,17 +41,25 @@ class Login extends Component
      */
     protected function redirectBasedOnRole($user)
     {
-        // 1. Role Based Redirection
-        $route = match ($user->role->slug) {
+        $roleSlug = $user->role->slug;
+
+        // 1. Determine the Route
+        $route = match ($roleSlug) {
             'worker'     => route('worker.dashboard'),
             'hospital'   => route('hospital.dashboard'),
             'diagnostic' => route('diagnostic.dashboard'),
             'dealer'     => route('dealer.dashboard'),
-            'member'     => route('user.dashboard'), // Regular Member
+            'member'     => route('user.dashboard'),
             default      => route('user.dashboard'),
         };
 
-        return $this->redirectIntended($route, navigate: true);
+        // 2. Check if it's a member to apply SPA navigation
+        if ($roleSlug === 'member') {
+            return $this->redirectIntended($route, navigate: true);
+        }
+
+        // 3. For all other roles, perform a standard full-page redirect
+        return $this->redirectIntended($route);
     }
 
     public function render()
