@@ -3,7 +3,7 @@
         <div class="row gy-4">
             <div class="col-lg-4 col-md-6">
                 <a class="navbar-brand fw-bold text-primary" href="index.html">
-                    <img src="{{ asset('assets/frontend/images/logo.png') }}" alt="">
+                    <img src="{{ asset('assets/frontend/images/logo-white.png') }}" alt="">
                 </a>
                 <p class="small">মানুষের কল্যাণে, স্বাস্থ্যের নিরাপত্তায়। আমাদের লক্ষ্য একটি সুস্থ ও সচেতন সমাজ গড়ে
                     তোলা।</p>
