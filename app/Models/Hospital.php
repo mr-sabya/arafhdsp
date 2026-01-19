@@ -13,7 +13,9 @@ class Hospital extends Model
         'address_en',
         'address_bn',
         'phone',
+        'serial_phones', // New field
         'photo',
+        'type',          // New field: hospital, diagnostic, nursing_home, clinic
         'benefits',
         'division_id',
         'district_id',
@@ -25,6 +27,7 @@ class Hospital extends Model
 
     protected $casts = [
         'benefits' => 'array',
+        'serial_phones' => 'array', // Automatically converts JSON to PHP Array
     ];
 
     // Relationships
@@ -53,6 +56,13 @@ class Hospital extends Model
         return $this->hasMany(User::class);
     }
 
+    public function doctors()
+    {
+        return $this->belongsToMany(Doctor::class)
+            ->withPivot('fee', 'discount_percent')
+            ->withTimestamps();
+    }
+
     // Dynamic Display Attributes
     public function getDisplayNameAttribute()
     {
@@ -62,5 +72,16 @@ class Hospital extends Model
     public function getDisplayAddressAttribute()
     {
         return App::getLocale() == 'bn' ? $this->address_bn : $this->address_en;
+    }
+
+
+    public static function getTypes()
+    {
+        return [
+            'hospital'          => App::getLocale() == 'bn' ? 'হাসপাতাল' : 'Hospital',
+            'diagnostic_center' => App::getLocale() == 'bn' ? 'ডায়াগনস্টিক সেন্টার' : 'Diagnostic Center',
+            'nursing_home'      => App::getLocale() == 'bn' ? 'নার্সিং হোম' : 'Nursing Home',
+            'clinic'            => App::getLocale() == 'bn' ? 'ক্লিনিক' : 'Clinic',
+        ];
     }
 }

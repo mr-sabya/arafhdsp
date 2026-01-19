@@ -63,4 +63,11 @@ class Doctor extends Model
     {
         return $this->belongsTo(Department::class);
     }
+
+    public function hospitals()
+    {
+        return $this->belongsToMany(Hospital::class)
+            ->withPivot('fee', 'discount_percent')
+            ->withTimestamps();
+    }
 }

@@ -20,13 +20,12 @@ class Index extends Component
 
     // Form Properties
     public $name_en, $name_bn, $address_en, $address_bn, $phone, $photo, $existingPhoto;
+    public $type = 'hospital', $serial_phones = []; 
     public $division_id, $district_id, $upazila_id, $area_id;
     public $sort_order = 0, $status = 1;
-    public $benefits = []; // Array to handle JSON logic
+    public $benefits = [];
 
-    // Dropdown Data
     public $districts = [], $upazilas = [], $areas = [];
-
     public $hospitalId, $isEditMode = false, $isOpen = false, $search = '';
 
     protected function rules()
@@ -34,13 +33,14 @@ class Index extends Component
         return [
             'name_en' => 'required|string',
             'name_bn' => 'required|string',
+            'type' => 'required',
             'division_id' => 'required',
             'district_id' => 'required',
             'photo' => $this->isEditMode ? 'nullable|image|max:1024' : 'required|image|max:1024',
+            'serial_phones.*' => 'nullable|string',
         ];
     }
 
-    // --- Benefit Management ---
     public function addBenefit()
     {
         $this->benefits[] = ['text_en' => '', 'text_bn' => '', 'class' => 'bg-info text-dark'];
@@ -52,7 +52,17 @@ class Index extends Component
         $this->benefits = array_values($this->benefits);
     }
 
-    // --- Dependent Dropdown Logic ---
+    public function addSerialPhone()
+    {
+        $this->serial_phones[] = '';
+    }
+
+    public function removeSerialPhone($index)
+    {
+        unset($this->serial_phones[$index]);
+        $this->serial_phones = array_values($this->serial_phones);
+    }
+
     public function updatedDivisionId($value)
     {
         $this->districts = District::where('division_id', $value)->get();
@@ -86,24 +96,15 @@ class Index extends Component
     public function resetFields()
     {
         $this->reset([
-            'name_en',
-            'name_bn',
-            'address_en',
-            'address_bn',
-            'phone',
-            'photo',
-            'existingPhoto',
-            'division_id',
-            'district_id',
-            'upazila_id',
-            'area_id',
-            'hospitalId',
-            'isEditMode',
-            'benefits'
+            'name_en', 'name_bn', 'address_en', 'address_bn', 'phone', 'photo', 'existingPhoto',
+            'division_id', 'district_id', 'upazila_id', 'area_id', 'hospitalId', 'isEditMode',
+            'benefits', 'type', 'serial_phones'
         ]);
         $this->status = 1;
         $this->sort_order = 0;
+        $this->type = 'hospital';
         $this->benefits = [];
+        $this->serial_phones = [];
     }
 
     public function save()
@@ -113,9 +114,11 @@ class Index extends Component
         $data = [
             'name_en' => $this->name_en,
             'name_bn' => $this->name_bn,
+            'type' => $this->type,
             'address_en' => $this->address_en,
             'address_bn' => $this->address_bn,
             'phone' => $this->phone,
+            'serial_phones' => array_filter($this->serial_phones),
             'division_id' => $this->division_id,
             'district_id' => $this->district_id,
             'upazila_id' => $this->upazila_id,
@@ -142,12 +145,13 @@ class Index extends Component
         $this->hospitalId = $id;
         $this->name_en = $hosp->name_en;
         $this->name_bn = $hosp->name_bn;
+        $this->type = $hosp->type;
         $this->address_en = $hosp->address_en;
         $this->address_bn = $hosp->address_bn;
         $this->phone = $hosp->phone;
+        $this->serial_phones = $hosp->serial_phones ?? [];
         $this->division_id = $hosp->division_id;
 
-        // Pre-load dropdowns
         $this->districts = District::where('division_id', $hosp->division_id)->get();
         $this->district_id = $hosp->district_id;
         $this->upazilas = Upazila::where('district_id', $hosp->district_id)->get();
