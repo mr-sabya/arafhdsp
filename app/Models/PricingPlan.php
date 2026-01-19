@@ -56,4 +56,10 @@ class PricingPlan extends Model
         return $this->belongsToMany(Service::class, 'plan_service')
             ->withPivot('quantity', 'frequency', 'discount_value');
     }
+
+    // users
+    public function users()
+    {
+        return $this->hasMany(User::class, 'pricing_plan_id');
+    }
 }
