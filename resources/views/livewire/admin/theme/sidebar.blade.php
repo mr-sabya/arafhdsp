@@ -113,6 +113,15 @@
                             <li class="nav-item">
                                 <a href="{{ route('admin.hospital.departments') }}" class="nav-link {{ Route::is('admin.hospital.departments') ? 'active' : '' }}" data-key="t-departments" wire:navigate> Departments </a>
                             </li>
+                            <!-- test category -->
+                            <li class="nav-item">
+                                <a href="{{ route('admin.hospital.medical-test.category') }}" class="nav-link {{ Route::is('admin.hospital.medical-test.category') ? 'active' : '' }}" data-key="t-test-category" wire:navigate> Test Category </a>
+                            </li>
+                            <!-- test -->
+                            <li class="nav-item">
+                                <a href="{{ route('admin.hospital.medical-test.test') }}" class="nav-link {{ Route::is('admin.hospital.medical-test.test') ? 'active' : '' }}" data-key="t-tests" wire:navigate> Tests </a>
+                            </li>
+
                             <li class="nav-item">
                                 <a href="{{ route('admin.hospital.doctors') }}" class="nav-link {{ Route::is('admin.hospital.doctors') ? 'active' : '' }}" data-key="t-doctors" wire:navigate> Doctors </a>
                             </li>

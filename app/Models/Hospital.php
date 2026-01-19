@@ -63,6 +63,14 @@ class Hospital extends Model
             ->withTimestamps();
     }
 
+    public function tests()
+    {
+        return $this->belongsToMany(MedicalTest::class, 'hospital_medical_test')
+            ->withPivot('price', 'discount_percent')
+            ->withTimestamps();
+    }
+
+
     // Dynamic Display Attributes
     public function getDisplayNameAttribute()
     {

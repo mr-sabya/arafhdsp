@@ -51,6 +51,11 @@
                                             title="Manage Doctors">
                                             <i class="ri-user-add-line"></i> Manage Doctors
                                         </button>
+                                        <button wire:click="$dispatchTo('admin.hospital.manage-tests', 'openManageTests', { id: {{ $hospital->id }} })"
+                                            class="btn btn-sm btn-outline-warning border-0 rounded"
+                                            title="Manage Medical Tests">
+                                            <i class="ri-flask-line"></i> Manage Tests
+                                        </button>
                                         <button wire:click="edit({{ $hospital->id }})" class="btn btn-sm btn-outline-info border-0 rounded-circle"><i class="ri-edit-line"></i></button>
                                         <button onclick="confirm('Delete this hospital?') || event.stopImmediatePropagation()" wire:click="delete({{ $hospital->id }})" class="btn btn-sm btn-outline-danger border-0 rounded-circle"><i class="ri-delete-bin-line"></i></button>
                                     </div>
@@ -230,4 +235,5 @@
 
 
     @livewire('admin.hospital.manage-doctors')
+    @livewire('admin.hospital.manage-tests')
 </div>

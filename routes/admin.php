@@ -58,6 +58,11 @@ Route::middleware('auth:admin')->group(function () {
         Route::get('/doctors', [App\Http\Controllers\Admin\HospitalController::class, 'doctors'])->name('doctors');
 
         Route::get('/hospitals', [App\Http\Controllers\Admin\HospitalController::class, 'hospitals'])->name('hospitals');
+
+        // test category
+        Route::get('/medical-test/category', [App\Http\Controllers\Admin\MedicalTestController::class, 'category'])->name('medical-test.category');
+        // test
+        Route::get('/medical-test/test', [App\Http\Controllers\Admin\MedicalTestController::class, 'test'])->name('medical-test.test');
     });
 
     // Diagnostic Management
