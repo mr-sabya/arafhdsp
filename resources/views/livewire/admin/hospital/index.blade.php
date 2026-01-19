@@ -3,7 +3,7 @@
         <div class="col-md-12">
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0 fw-bold">Partner Hospitals & Centers</h5>
+                    <h5 class="mb-0 fw-bold">Partner Hospitals & Diagnostic Centers</h5>
                     <div class="d-flex gap-2">
                         <div class="input-group input-group-sm" style="width: 250px;">
                             <span class="input-group-text bg-light border-end-0"><i class="ri-search-line"></i></span>
@@ -31,6 +31,8 @@
                                     <img src="{{ asset('storage/'.$hospital->photo) }}" class="rounded-3 shadow-sm me-3" style="width: 80px; height: 80px; object-fit: cover;">
                                     <div>
                                         <h6 class="fw-bold mb-1">{{ $hospital->name_bn }}</h6>
+                                        <!-- type -->
+                                        <span class="badge bg-secondary rounded-pill small">{{ $hospital->type }}</span>
                                         <p class="text-muted small mb-0"><i class="ri-map-pin-line me-1"></i> {{ $hospital->area->name_bn ?? $hospital->district->name_bn }}</p>
                                     </div>
                                 </div>

@@ -133,7 +133,7 @@
                     </div>
                 </li>
                 <!-- diagnostic management -->
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a class="nav-link menu-link {{ Route::is('admin.diagnostic.*') ? 'collapsed active' : '' }}" href="#diagnosticManage" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarPages">
                         <i class="bi bi-heart-pulse"></i> <span data-key="t-diagnostic">Diagnostic</span>
@@ -146,7 +146,7 @@
 
                         </ul>
                     </div>
-                </li>
+                </li> -->
 
                 <!-- user management -->
                 <li class="nav-item">
