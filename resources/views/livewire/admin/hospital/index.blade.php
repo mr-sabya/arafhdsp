@@ -33,7 +33,12 @@
                                         <h6 class="fw-bold mb-1">{{ $hospital->name_bn }}</h6>
                                         <!-- type -->
                                         <span class="badge bg-secondary rounded-pill small">{{ $hospital->type }}</span>
-                                        <p class="text-muted small mb-0"><i class="ri-map-pin-line me-1"></i> {{ $hospital->area->name_bn ?? $hospital->district->name_bn }}</p>
+                                        <p class="text-muted small mb-0"><i class="ri-map-pin-line me-1"></i>
+                                            {{ $hospital->area ? $hospital->area->bn_name . ($hospital->district ? ', ' : '') : '' }}
+
+                                            {{-- ডিস্ট্রিক্ট থাকলে দেখাবে --}}
+                                            {{ $hospital->district->bn_name ?? '' }}
+                                        </p>
                                     </div>
                                 </div>
 
